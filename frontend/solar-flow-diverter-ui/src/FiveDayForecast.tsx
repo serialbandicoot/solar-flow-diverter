@@ -107,11 +107,18 @@ const [locationName, setLocationName] = useState<string>('');
       <table>
         <thead>
           <tr>
-            {fiveDayForecast.map((day, index) => (
-              <th key={index}>{day}</th>
-            ))}
+            {fiveDayForecast.map((day, index) => {
+              const today = new Date();
+              const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + index);
+              const dayOfWeek = days[currentDate.getDay()];
+              const month = currentDate.toLocaleString('en-US', { month: 'short' });
+              const formattedDate = `${dayOfWeek} (${currentDate.getDate()}-${month})`;
+
+              return <th key={index}>{formattedDate}</th>;
+            })}
           </tr>
         </thead>
+
         <tbody>
         <tr>
             {weatherData.map((period, periodIndex) => {
