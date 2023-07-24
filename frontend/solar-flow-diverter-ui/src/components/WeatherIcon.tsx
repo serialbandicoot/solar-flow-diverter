@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ReactComponent as Icon0 } from './icons/0.svg';
 import { ReactComponent as Icon1 } from './icons/1.svg';
 import { ReactComponent as Icon2 } from './icons/2.svg';
+import { ReactComponent as Icon3 } from './icons/3.svg';
 import { ReactComponent as Icon7 } from './icons/7.svg';
 import { ReactComponent as Icon8 } from './icons/8.svg';
 import { ReactComponent as Icon9 } from './icons/9.svg';
@@ -22,6 +23,7 @@ const WeatherIcon: React.FC<WeatherIconProps> = ({ number }) => {
       '0': Icon0,
       '1': Icon1,
       '2': Icon2,
+      '3': Icon3,
       '7': Icon7,
       '8': Icon8,
       '9': Icon9,

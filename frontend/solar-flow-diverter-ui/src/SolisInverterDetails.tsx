@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import BatteryIcon from './components/BatterIcon';
 import ModalSpinner from './components/ModalSpinner';
 
+import { apiUrl } from './config';
+
 interface InverterData {
   plant: {
     dailyOnGridEnergy: number;
@@ -22,7 +24,7 @@ const SolisInverterDetails: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        fetch('http://localhost:5000/api/get_inverter_detail')
+        fetch(apiUrl + '/get_inverter_detail')
           .then(response => {
             return response.json();
           })

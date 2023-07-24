@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import WeatherIcon from './WeatherIcon'
+import WeatherIcon from './components/WeatherIcon'
 import './index.css';
+
+import { apiUrl } from './config';
 
 interface Props {}
 
@@ -17,13 +19,13 @@ interface WeatherData {
 }
 
 const VISIBILITY: { [key: string]: string } = {
-  UN: "Unknown",
-  VP: "Very poor - Less than 1 km",
-  PO: "Poor - Between 1-4 km",
-  MO: "Moderate - Between 4-10 km",
-  GO: "Good - Between 10-20 km",
-  VG: "Very good - Between 20-40 km",
-  EX: "Excellent - More than 40 km",
+  UN: "unknown",
+  VP: "very poor",
+  PO: "poor",
+  MO: "moderate",
+  GO: "good",
+  VG: "very good",
+  EX: "excellent",
 };
 
 const WEATHER_CODES: { [key: string]: string } = {
@@ -62,20 +64,20 @@ const WEATHER_CODES: { [key: string]: string } = {
 };
 
 const SevenDayForecast: React.FC<Props> = () => {
-  const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
-  const [locationName, setLocationName] = useState<string>('');
+const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
+const [locationName, setLocationName] = useState<string>('');
 
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/api/get_metoffice_data');
+        const response = await fetch(apiUrl + '/get_metoffice_data');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
         const data = await response.json();
         const locationName = data.SiteRep.DV.Location.name;
         setLocationName(locationName);
-        setWeatherData(data.SiteRep.DV.Location.Period); // Assuming data is an array of WeatherData
+        setWeatherData(data.SiteRep.DV.Location.Period); 
       } catch (error) {
         console.error('Error fetching weather data:', error);
       }
