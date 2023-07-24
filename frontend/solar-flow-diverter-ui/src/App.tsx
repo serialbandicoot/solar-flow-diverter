@@ -1,16 +1,19 @@
 import React from 'react';
-import './index.css';
-import SolisInverterDetails from './SolisInverterDetails';
-import SevenDayForecast from './FiveDayForecast'; // Import the SevenDayForecast component
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import SettingsScreen from './SettingsScreen'; 
+import Home from './Home';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div>
-      <h1>Solar Flow Diverter</h1>
-      <SolisInverterDetails />
-      <SevenDayForecast /> 
-    </div>
+    <BrowserRouter>
+      <div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/settings" element={<SettingsScreen />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;

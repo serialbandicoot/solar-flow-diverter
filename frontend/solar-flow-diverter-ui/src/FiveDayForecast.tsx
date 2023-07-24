@@ -63,9 +63,10 @@ const WEATHER_CODES: { [key: string]: string } = {
   "30": "Thunder",
 };
 
-const SevenDayForecast: React.FC<Props> = () => {
-const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
-const [locationName, setLocationName] = useState<string>('');
+const FiveDayForecast: React.FC<Props> = () => {
+  
+  const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
+  const [locationName, setLocationName] = useState<string>('');
 
   useEffect(() => {
     const fetchWeatherData = async () => {
@@ -156,4 +157,4 @@ const [locationName, setLocationName] = useState<string>('');
   );
 };
 
-export default SevenDayForecast;
+export default FiveDayForecast;
