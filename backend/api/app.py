@@ -4,14 +4,17 @@ import os
 from dotenv import load_dotenv
 from aiohttp import ClientError, ClientSession
 from flask import Flask
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import json
+
+from requests import Response
 from backend.api.src.metoffer import MetOffer
 from backend.api.src import metoffer
 
 
 app = Flask(__name__)
-CORS(app, origins='http://localhost:3000')
+app.config['CORS_HEADERS'] = 'Content-Type'
+CORS(app)
 
 # Load environment variables from .env file
 load_dotenv()
@@ -54,7 +57,11 @@ async def get_metoffice_data():
     
     return jsonify(bath)
 
-    
+@app.after_request
+def after_request(response: Response) -> Response:
+    response.access_control_allow_origin = "*"
+    return response
+
 if __name__ == "__main__":
     app.run(debug=True)
 
