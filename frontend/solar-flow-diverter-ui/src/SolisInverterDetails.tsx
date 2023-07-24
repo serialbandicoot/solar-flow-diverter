@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import BatteryIcon from './components/BatterIcon';
+import ModalSpinner from './components/ModalSpinner';
 
 interface InverterData {
   plant: {
@@ -9,7 +10,7 @@ interface InverterData {
     dailyEnergyPurchasedUnit: string;
     energyToday: number;
     remainingCapacity: number;
-    acPower: number; // Added acPower in Wh
+    acPower: number; 
   };
   login: boolean;
 }
@@ -23,19 +24,18 @@ const SolisInverterDetails: React.FC = () => {
       try {
         fetch('http://localhost:5000/api/get_inverter_detail')
           .then(response => {
-            console.log('here!');
             return response.json();
           })
           .then(data => {
             // Process the fetched data
             const jsonData: InverterData = data;
             setData(jsonData);
+            setIsLoading(false);
           })
           .catch(error => {
             console.log(error);
           });
 
-        setIsLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
         setIsLoading(false);
@@ -44,10 +44,6 @@ const SolisInverterDetails: React.FC = () => {
 
     fetchData();
   }, []);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   // Function to convert watt-hours (Wh) to kilowatt-hours (kWh)
   const convertToKilowattHours = (wattHours: number): number => {
@@ -84,6 +80,7 @@ const SolisInverterDetails: React.FC = () => {
           )}
         </tbody>
       </table>
+      <ModalSpinner loading={isLoading} />
     </div>
   );
 };
