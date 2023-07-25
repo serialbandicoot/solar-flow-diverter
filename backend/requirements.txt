@@ -6,3 +6,4 @@ Flask-Cors
 requests
 python-dotenv
 asgiref
+gunicorn
