@@ -13,7 +13,8 @@ from src import metoffer
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
-CORS(app, origins=['http://127.0.0.1:3000', 'http://solar-flow-diverter.uk'])
+# CORS(app, origins=['http://127.0.0.1:3000', 'http://solar-flow-diverter.uk'])
+CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:3000"}})
 
 # Load environment variables from .env file
 load_dotenv()
