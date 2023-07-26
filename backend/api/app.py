@@ -8,8 +8,8 @@ from flask_cors import CORS, cross_origin
 import json
 
 from requests import Response
-from backend.api.src.metoffer import MetOffer
-from backend.api.src import metoffer
+from api.src.metoffer import MetOffer
+from api.src import metoffer
 
 
 app = Flask(__name__)
@@ -20,8 +20,8 @@ CORS(app)
 load_dotenv()
 
 from flask import Flask, jsonify
-from backend.api.src.soliscloud_api import SoliscloudAPI, SoliscloudConfig
-from backend.config.config import load_config
+from api.src.soliscloud_api import SoliscloudAPI, SoliscloudConfig
+from api.config import load_config
 
 
 @app.route("/api/get_inverter_detail", methods=["GET"])
@@ -50,11 +50,16 @@ async def get_inverter_detail():
     
 @app.route("/api/get_metoffice_data", methods=["GET"])
 async def get_metoffice_data():
+
+    print("START")	
     config_values = load_config()
     
     M = MetOffer(config_values['met_office_api_key'])
     bath = M.nearest_loc_forecast(51.358433, -2.374655, metoffer.DAILY)
     
+    print("END")
+	
+
     return jsonify(bath)
 
 @app.after_request
