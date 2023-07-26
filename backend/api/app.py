@@ -68,5 +68,5 @@ def after_request(response: Response) -> Response:
     return response
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
 
