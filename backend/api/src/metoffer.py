@@ -46,10 +46,10 @@ HOST = "http://datapoint.metoffice.gov.uk/public/data"
 USER_AGENT = "Mozilla/5.0"  # because default "Python-urllib/[ver]" gets HTTP response 403 where it never used to.
 
 # Data categories
-VAL = "val"             # Location-specific data
-TEXT = "txt"            # Textual data
-IMAGE = "image"         # Stand-alone imagery
-LAYER = "layer"         # Map overlay imagery
+VAL = "val"  # Location-specific data
+TEXT = "txt"  # Textual data
+IMAGE = "image"  # Stand-alone imagery
+LAYER = "layer"  # Map overlay imagery
 
 
 # Resource type: forecast or observation
@@ -58,7 +58,7 @@ OBSERVATIONS = "wxobs"
 
 
 # Field
-ALL = "all"             # Can also be used instead of a location ID
+ALL = "all"  # Can also be used instead of a location ID
 # For textual data only:
 UK_EXTREMES = "ukextremes"
 NATIONAL_PARK = "nationalpark"
@@ -68,13 +68,13 @@ MOUNTAIN_AREA = "mountainarea"
 SURFACE_PRESSURE = "surfacepressure"
 
 
-DATA_TYPE = "json"      # Easier to work with than the XML alternative
+DATA_TYPE = "json"  # Easier to work with than the XML alternative
 
 
 # Requests
 SITELIST = "sitelist"
 CAPABILITIES = "capabilities"
-LATEST = "latest"       # For textual data only
+LATEST = "latest"  # For textual data only
 
 
 # Time steps
@@ -116,8 +116,8 @@ WEATHER_CODES = {
     27: "Heavy snow",
     28: "Thunder shower (night)",
     29: "Thunder shower (day)",
-    30: "Thunder"
-    }
+    30: "Thunder",
+}
 
 
 VISIBILITY = {
@@ -127,8 +127,8 @@ VISIBILITY = {
     "MO": "Moderate - Between 4-10 km",
     "GO": "Good - Between 10-20 km",
     "VG": "Very good - Between 20-40 km",
-    "EX": "Excellent - More than 40 km"
-    }
+    "EX": "Excellent - More than 40 km",
+}
 
 
 REGIONS = {
@@ -148,8 +148,8 @@ REGIONS = {
     "sw": ("513", "Southwest England"),
     "se": ("514", "London and Southeast England"),
     "uk": ("515", "United Kingdom"),
-    "wl": ("516", "Wales")
-    }
+    "wl": ("516", "Wales"),
+}
 
 
 def guidance_UV(index):
@@ -159,7 +159,9 @@ def guidance_UV(index):
     elif 2 < index < 6:
         guidance = "Moderate exposure. Seek shade during midday hours, cover up and wear sunscreen"
     elif 5 < index < 8:
-        guidance = "High exposure. Seek shade during midday hours, cover up and wear sunscreen"
+        guidance = (
+            "High exposure. Seek shade during midday hours, cover up and wear sunscreen"
+        )
     elif 7 < index < 11:
         guidance = "Very high. Avoid being outside during midday hours. Shirt, sunscreen and hat are essential"
     elif index > 10:
@@ -173,39 +175,40 @@ class MetOffer:
     def __init__(self, key):
         self.key = key
 
-    def _query(self, data_category, resource_category, field, request, step, isotime=None):
+    def _query(
+        self, data_category, resource_category, field, request, step, isotime=None
+    ):
         """
         Request and return data from DataPoint RESTful API.
         """
-        params = {
-            "res": step,
-            "key": self.key
-        }
+        params = {"res": step, "key": self.key}
         if isotime:
             params["time"] = isotime
-        
-        url_base = "/".join([HOST, data_category, resource_category, field, DATA_TYPE, request])
-      
+
+        url_base = "/".join(
+            [HOST, data_category, resource_category, field, DATA_TYPE, request]
+        )
+
         url = f"{url_base}?{self._build_query_string(params=params)}"
 
         try:
             response = requests.get(url, data=None, headers={"User-Agent": USER_AGENT})
             if response.status_code == 200:
                 return response.text
-        
+
         except requests.exceptions.RequestException as e:
             print(f"An error occurred: {e}")
-            return None 
+            return None
 
     def _build_query_string(self, params):
         encoded_params = urllib.parse.urlencode(params)
         return encoded_params
-    
+
     def loc_forecast(self, request, step, isotime=None):
         """
         Return location-specific forecast data (including lists of available
         sites and time capabilities) for given time step.
-        
+
         request:
             metoffer.SITELIST        Returns available sites
             metoffer.CAPABILITIES    Returns available times
@@ -228,7 +231,7 @@ class MetOffer:
         """
         Work out nearest possible site to lat & lon coordinates
         and return its forecast data for the given time step.
-        
+
         lat:                        float or int.  Latitude.
         lon:                        float or int.  Longitude.
         step:
@@ -244,20 +247,24 @@ class MetOffer:
         """
         Return location-specific observation data, including a list of sites
         (time step will be HOURLY).
-        
-        request: 
+
+        request:
             metoffer.SITELIST        Returns available sites
             metoffer.CAPABILITIES    Returns available times
             site ID, e.g. "3021"     Returns observation data for site
             metoffer.ALL             Returns observation data for ALL sites
         """
-        return json.loads(self._query(VAL, OBSERVATIONS, ALL, request, HOURLY).decode(errors="replace"))
+        return json.loads(
+            self._query(VAL, OBSERVATIONS, ALL, request, HOURLY).decode(
+                errors="replace"
+            )
+        )
 
     def nearest_loc_obs(self, lat, lon):
         """
         Work out nearest possible site to lat & lon coordinates
         and return observation data for it.
-        
+
         lat:    float or int.  Latitude.
         lon:    float or int.  Longitude.
         """
@@ -270,7 +277,7 @@ class MetOffer:
         """
         Return textual forecast data for regions, national parks or mountain
         areas.
-        
+
         field:
             metoffer.NATIONAL_PARK           Data on national parks
             metoffer.REGIONAL_FORECAST       Regional data (see REGIONS)
@@ -282,28 +289,38 @@ class MetOffer:
             Can also use metoffer.ALL to return data for ALL sites,
                 but ONLY when field=metoffer.NATIONAL_PARK
         """
-        if request == ALL and field != NATIONAL_PARK: # "All" locations only for use with national parks
+        if (
+            request == ALL and field != NATIONAL_PARK
+        ):  # "All" locations only for use with national parks
             raise TypeError
-        return json.loads(self._query(TEXT, FORECAST, field, request, "").decode(errors="replace"))
+        return json.loads(
+            self._query(TEXT, FORECAST, field, request, "").decode(errors="replace")
+        )
 
     def text_uk_extremes(self, request):
         """
         Return textual data of UK extremes.
-        
+
         request:
             metoffer.CAPABILITIES            Returns available extreme date
                                              and issue time
             metoffer.LATEST                  Returns data of latest extremes
                                              for all regions
         """
-        return json.loads(self._query(TEXT, OBSERVATIONS, UK_EXTREMES, request, "").decode(errors="replace"))
+        return json.loads(
+            self._query(TEXT, OBSERVATIONS, UK_EXTREMES, request, "").decode(
+                errors="replace"
+            )
+        )
 
     def stand_alone_imagery(self):
         """
         Returns capabilities data for stand alone imagery and includes
         URIs for the images.
         """
-        return json.loads(self._query(IMAGE, FORECAST, SURFACE_PRESSURE, CAPABILITIES, ""))
+        return json.loads(
+            self._query(IMAGE, FORECAST, SURFACE_PRESSURE, CAPABILITIES, "")
+        )
 
     def map_overlay_forecast(self):
         """Returns capabilities data for forecast map overlays."""
@@ -323,6 +340,7 @@ class Site:
     simply calculates the difference between the two sets of coord-
     inates and arrives at a value through Pythagorean theorem.
     """
+
     def __init__(self, ident, name, lat=None, lon=None):
         self.ident = ident
         self.name = name
@@ -330,7 +348,9 @@ class Site:
         self.lon = lon
 
     def distance_to_coords(self, lat_a, lon_a):
-        self.distance = (abs(self.lat - lat_a) ** 2) + (abs(self.lon - lon_a) ** 2) ** .5
+        self.distance = (abs(self.lat - lat_a) ** 2) + (
+            abs(self.lon - lon_a) ** 2
+        ) ** 0.5
 
 
 def parse_sitelist(sitelist):
@@ -341,7 +361,7 @@ def parse_sitelist(sitelist):
             ident = site["id"]
             name = site["name"]
         except KeyError:
-            ident = site["@id"] # Difference between loc-spec and text for some reason
+            ident = site["@id"]  # Difference between loc-spec and text for some reason
             name = site["@name"]
         if "latitude" in site:
             lat = float(site["latitude"])
@@ -357,7 +377,7 @@ def get_nearest_site(sites, lat, lon):
     """
     Return a string which can be used as "request" in calls to loc_forecast
     and loc_observations.
-    
+
     sites:    List of Site instances
     lat:      float or int.  Interesting latitude
     lon:      float or int.  Interesting longitude
@@ -373,12 +393,16 @@ def extract_data_key(returned_data):
     Build and return dict containing measurement 'name', description ('text')
     and unit of measurement.
     """
-    return {i["name"]: {"text": i["$"], "units": i["units"]} for i in returned_data["SiteRep"]["Wx"]["Param"]}
+    return {
+        i["name"]: {"text": i["$"], "units": i["units"]}
+        for i in returned_data["SiteRep"]["Wx"]["Param"]
+    }
 
 
-class Weather():
+class Weather:
     """A hold-all for returned weather data, including associated metadata, parsed from the returned dict
     of MetOffer location-specific data."""
+
     def __init__(self, returned_data):
         def _weather_dict_gen(returned_data, data_key):
             returned_reps = returned_data["SiteRep"]["DV"]["Location"]["Period"]
@@ -392,23 +416,37 @@ class Weather():
                     ureps = [i["Rep"]]
                 for rep in ureps:
                     try:
-                        dt = (date + datetime.timedelta(seconds=int(rep["$"]) * 60), "")  # dt always a tuple
-                    except(ValueError):
+                        dt = (
+                            date + datetime.timedelta(seconds=int(rep["$"]) * 60),
+                            "",
+                        )  # dt always a tuple
+                    except ValueError:
                         dt = (date, rep["$"])  # Used for "DAILY" (time) step
-                    except(KeyError):
-                        dt = (date, "") 
+                    except KeyError:
+                        dt = (date, "")
                     del rep["$"]
                     weather = {"timestamp": dt}
                     for n in rep:
                         try:
                             # -99 is used by the Met Office as a value where no data is held.
                             weather[data_key[n]["text"]] = (
-                            int(rep[n]) if rep[n] != "-99" else None, data_key[n]["units"], n)
-                        except(ValueError):
+                                int(rep[n]) if rep[n] != "-99" else None,
+                                data_key[n]["units"],
+                                n,
+                            )
+                        except ValueError:
                             try:
-                                weather[data_key[n]["text"]] = (float(rep[n]), data_key[n]["units"], n)
-                            except(ValueError):
-                                weather[data_key[n]["text"]] = (rep[n], data_key[n]["units"], n)
+                                weather[data_key[n]["text"]] = (
+                                    float(rep[n]),
+                                    data_key[n]["units"],
+                                    n,
+                                )
+                            except ValueError:
+                                weather[data_key[n]["text"]] = (
+                                    rep[n],
+                                    data_key[n]["units"],
+                                    n,
+                                )
                     yield weather
 
         self.ident = returned_data["SiteRep"]["DV"]["Location"]["i"]
@@ -426,9 +464,10 @@ class Weather():
             self.data.append(weather)
 
 
-class TextForecast():
+class TextForecast:
     """A hold-all for returned textual regional forecast, including associated metadata, created by parsing
     the data returned by MetOffer.text_forecast."""
+
     def __init__(self, returned_data):
         self.data = []
         for period in returned_data["RegionalFcst"]["FcstPeriods"]["Period"]:

@@ -1,18 +1,5 @@
 import React from 'react';
 
-interface Settings {
-  key_id: string;
-  secret_key: string;
-  plant_id: string;
-  station_id: string;
-  serial_number: string;
-  portal_domain: string;
-  portal_username: string;
-  met_office_api_key: string;
-  lat: number;
-  long: number;
-}
-
 interface Props {}
 
 const SettingsScreen: React.FC<Props> = () => {
