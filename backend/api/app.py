@@ -13,7 +13,7 @@ from src import metoffer
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
-CORS(app)
+CORS(app, origins=['http://127.0.0.1:3000', 'http://solar-flow-diverter.uk'])
 
 # Load environment variables from .env file
 load_dotenv()
@@ -58,14 +58,10 @@ async def get_inverter_detail():
 @app.route("/api/get_metoffice_data", methods=["GET"])
 async def get_metoffice_data():
 
-    print("START")	
     config_values = load_config()
     
     M = MetOffer(config_values['met_office_api_key'])
     bath = M.nearest_loc_forecast(51.358433, -2.374655, metoffer.DAILY)
-    
-    print("END")
-	
 
     return jsonify(bath)
 
