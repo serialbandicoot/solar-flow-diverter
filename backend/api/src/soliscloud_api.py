@@ -23,8 +23,8 @@ from aiohttp import ClientError, ClientSession
 import async_timeout
 import yaml
 
-from api.src.ginlong_api import BaseAPI, GinlongData, PortalConfig
-from api.src.ginlong_const import *
+from src.ginlong_api import BaseAPI, GinlongData, PortalConfig
+from src.ginlong_const import *
 from .soliscloud_const import *
 
 _LOGGER = logging.getLogger(__name__)
