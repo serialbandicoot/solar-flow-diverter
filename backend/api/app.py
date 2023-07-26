@@ -21,7 +21,7 @@ load_dotenv()
 
 from flask import Flask, jsonify
 from api.src.soliscloud_api import SoliscloudAPI, SoliscloudConfig
-from api.config import load_config
+from api.config.config import load_config
 
 
 @app.route("/api/get_inverter_detail", methods=["GET"])
