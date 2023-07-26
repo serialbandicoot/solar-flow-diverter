@@ -7,4 +7,3 @@ requests
 python-dotenv
 asgiref
 gunicorn
-wsgi
