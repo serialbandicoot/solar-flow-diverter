@@ -19,23 +19,6 @@ interface PeriodData {
   value: string;
 }
 
-interface LocationData {
-  continent: string;
-  country: string;
-  elevation: string;
-  i: string;
-  lat: string;
-  lon: string;
-  name: string;
-  dataDate: string;
-  type: string;
-}
-
-interface DVData {
-  Location: LocationData;
-  Period: Array<PeriodData>;
-}
-
 
 const VISIBILITY: { [key: string]: string } = {
   UN: "unknown",
