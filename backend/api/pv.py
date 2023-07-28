@@ -7,7 +7,7 @@ from aiohttp import ClientSession
 from src.helper_db import HelperDB
 import asyncio
 
-EPOC = 5
+EPOC = 10
 
 async def pv():
     print(f"*** Solar PV Data - {dt.datetime.now()} ***")
@@ -25,26 +25,33 @@ async def pv():
     solis_api = soliscloud_api.SoliscloudAPI(config)
 
     retry = 0
-    max_tries = 3
+    max_tries = 2
+    save_data = False
 
     async def get_data():
         return await solis_api.login(session)
 
     while retry < max_tries:
-        login = get_data()
+        login = await get_data()
+        print(login)
         if login == False or login is None:
             print(f"*** Failed Login - retry in {EPOC} minutes ***") 
+            asyncio.sleep(5)
         else:
-            break    
+            save_data = True
+            break 
+
+        retry = retry + 1  
 
     await solis_api.logout()
     await session.close()
 
-    HelperDB().post_pv(solis_api._data)
+    if save_data:
+        HelperDB().post_pv(solis_api._data)
 
 async def main():
     schedule = Scheduler()
-    schedule.cyclic(dt.timedelta(minutes=EPOC), pv)
+    schedule.cyclic(dt.timedelta(seconds=30), pv)
     
     print(schedule)
 

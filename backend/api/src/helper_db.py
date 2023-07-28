@@ -25,11 +25,11 @@ class HelperDB:
         ))
         return db.getDb(db_path)
     
-    def _get_first(self, store):
-        store = store.get()
-        if len(store) != 1:
+    def _get_last(self, store):
+        store = store.getAll()
+        if len(store) == 0:
             return None
-        return store[0]
+        return store[len(store)-1]
 
     def post_5day(self, data):
         store = self._get_or_create(Store.MO)   
@@ -52,11 +52,11 @@ class HelperDB:
     def get_5day(self):
         store = self._get_or_create(Store.MO)
         
-        return self._get_first(store)
+        return self._get_last(store)
 
     def get_last_pv(self):
         store = self._get_or_create(Store.PV)
 
-        return self._get_first(store)
+        return self._get_last(store)
 
 
