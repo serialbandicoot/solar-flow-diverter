@@ -35,7 +35,7 @@ async def pv():
         login = await get_data()
         print(login)
         if login == False or login is None:
-            print(f"*** Failed Login - retry in {EPOC} minutes ***") 
+            print(f"*** Failed Login - retry in 5 seconds ***") 
             asyncio.sleep(5)
         else:
             save_data = True
@@ -51,7 +51,7 @@ async def pv():
 
 async def main():
     schedule = Scheduler()
-    schedule.cyclic(dt.timedelta(seconds=30), pv)
+    schedule.cyclic(dt.timedelta(minutes=EPOC), pv)
     
     print(schedule)
 
