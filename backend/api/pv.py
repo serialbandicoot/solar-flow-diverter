@@ -23,10 +23,19 @@ async def pv():
 
     session = ClientSession()
     solis_api = soliscloud_api.SoliscloudAPI(config)
-    login = await solis_api.login(session)
-    if login == False or login is None:
-        print(f"*** Failed Login - retry in {EPOC} minutes ***")
-        return 
+
+    retry = 0
+    max_tries = 3
+
+    async def get_data():
+        return await solis_api.login(session)
+
+    while retry < max_tries:
+        login = get_data()
+        if login == False or login is None:
+            print(f"*** Failed Login - retry in {EPOC} minutes ***") 
+        else:
+            break    
 
     await solis_api.logout()
     await session.close()
