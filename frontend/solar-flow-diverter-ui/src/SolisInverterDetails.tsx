@@ -24,6 +24,21 @@ const SolisInverterDetails: React.FC = () => {
   const [data, setData] = useState<InverterData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const reloadPage = () => {
+    window.location.reload(); // Reload the current page
+  };
+
+  useEffect(() => {
+    // Schedule the page reload every 5 minutes (300,000 milliseconds)
+    const interval = setInterval(reloadPage, 300000); // 5 minutes = 5 * 60 seconds * 1000 milliseconds
+
+    // Clean up the interval when the component is unmounted
+    return () => {
+      console.log('** Page Refresh **')
+      clearInterval(interval);
+    };
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {

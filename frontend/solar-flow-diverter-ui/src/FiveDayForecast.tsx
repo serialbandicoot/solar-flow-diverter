@@ -103,6 +103,21 @@ const FiveDayForecast: React.FC<Props> = () => {
   const rotatedDays = rotateDays(days, today.getDay());
   const fiveDayForecast = rotatedDays.slice(0, 5); // Get the first 5 days for the forecast
 
+  const reloadPage = () => {
+    window.location.reload(); // Reload the current page
+  };
+
+  useEffect(() => {
+    // Schedule the page reload every 5 minutes (300,000 milliseconds)
+    const interval = setInterval(reloadPage, 300000); // 5 minutes = 5 * 60 seconds * 1000 milliseconds
+
+    // Clean up the interval when the component is unmounted
+    return () => {
+      console.log('** Page Refresh **')
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <div className="componentTop">
       <h2>5 Day Forecast ({locationName})</h2>
