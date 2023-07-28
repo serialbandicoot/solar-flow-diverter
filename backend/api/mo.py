@@ -6,7 +6,7 @@ from config.config import load_config
 from src.helper_db import HelperDB
 from src import metoffer
 
-EPOC = 1 
+EPOC = 5
 
 def mo():
     print(f"*** Get 5 Day Forecast - {dt.datetime.now()} ***")
