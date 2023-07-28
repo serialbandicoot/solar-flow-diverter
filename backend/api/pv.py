@@ -10,7 +10,7 @@ import asyncio
 EPOC = 5
 
 async def pv():
-    print(f"*** Get 5 Day Forecast - {dt.datetime.now()} ***")
+    print(f"*** Solar PV Data - {dt.datetime.now()} ***")
     config_values = load_config()
 
     config = soliscloud_api.SoliscloudConfig(
