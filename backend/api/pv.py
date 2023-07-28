@@ -36,7 +36,7 @@ async def pv():
         print(login)
         if login == False or login is None:
             print(f"*** Failed Login - retry in 5 seconds ***") 
-            asyncio.sleep(10)
+            await asyncio.sleep(10)
         else:
             save_data = True
             break 
