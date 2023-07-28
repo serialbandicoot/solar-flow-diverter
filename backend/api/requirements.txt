@@ -7,3 +7,5 @@ requests
 python-dotenv
 asgiref
 gunicorn
+scheduler
+pysondb

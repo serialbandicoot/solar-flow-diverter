@@ -6,17 +6,36 @@ import { apiUrl } from './config';
 
 interface Props {}
 
-interface WeatherData {
-  Rep: {
-    $: string;
-    Dm: string;
-    V: string;
-    W: string;
-    // Add other fields as needed based on the actual response structure
-  }[];
+interface RepData {
+  day: string;
+  Dm: string;
+  W: string;
+  V: string;
+}
+
+interface PeriodData {
+  Rep: Array<RepData>;
   type: string;
   value: string;
 }
+
+interface LocationData {
+  continent: string;
+  country: string;
+  elevation: string;
+  i: string;
+  lat: string;
+  lon: string;
+  name: string;
+  dataDate: string;
+  type: string;
+}
+
+interface DVData {
+  Location: LocationData;
+  Period: Array<PeriodData>;
+}
+
 
 const VISIBILITY: { [key: string]: string } = {
   UN: "unknown",
@@ -65,24 +84,23 @@ const WEATHER_CODES: { [key: string]: string } = {
 
 const FiveDayForecast: React.FC<Props> = () => {
   
-  const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
+  const [weatherData, setWeatherData] = useState<PeriodData[]>([]);
   const [locationName, setLocationName] = useState<string>('');
 
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
-        const response = await fetch(apiUrl + '/get_metoffice_data');
+        const response = await fetch(apiUrl + '/5d');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
-        const data = await response.json();
-        const locationName = data.SiteRep.DV.Location.name;
+        const data = await response.json(); 
+        const locationName = data.fiveDay.SiteRep.DV.Location.name;
         setLocationName(locationName);
-        setWeatherData(data.SiteRep.DV.Location.Period); 
+        setWeatherData(data.fiveDay.SiteRep.DV.Location.Period); 
       } catch (error) {
         console.error('Error fetching weather data:', error);
-      }
-    };
+      }    };
 
     fetchWeatherData();
   }, []);
@@ -123,7 +141,7 @@ const FiveDayForecast: React.FC<Props> = () => {
         <tbody>
         <tr>
             {weatherData.map((period, periodIndex) => {
-              const temperature = parseInt(period.Rep[0].Dm, 10);
+              const temperature = parseInt(period.Rep[0].Dm , 10);
               return (
                 <td key={periodIndex} className="centered-td">
                   <div className="centered-container">
