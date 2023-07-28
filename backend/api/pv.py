@@ -25,7 +25,7 @@ async def pv():
     solis_api = soliscloud_api.SoliscloudAPI(config)
 
     retry = 0
-    max_tries = 2
+    max_tries = 3
     save_data = False
 
     async def get_data():
@@ -36,7 +36,7 @@ async def pv():
         print(login)
         if login == False or login is None:
             print(f"*** Failed Login - retry in 5 seconds ***") 
-            asyncio.sleep(5)
+            asyncio.sleep(10)
         else:
             save_data = True
             break 
