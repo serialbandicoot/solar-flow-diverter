@@ -1,41 +1,93 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { apiUrl } from './config';
+import Header from './components/Header';
 
-interface Props {}
+interface PlantData {
+  KEY_ID: string;
+  SECRET_KEY: string;
+  PLANT_ID: string;
+  STATION_ID: string;
+  SERIAL_NUMBER: string;
+  PORTAL_DOMAIN: string;
+  PORTAL_USERNAME: string;
+  MET_OFFICE_API_KEY: string;
+  LAT: string;
+  LONG: string;
+}
 
-const SettingsScreen: React.FC<Props> = () => {
-  // You can access the settings within the component
+interface ApiData {
+  timestamp: string;
+  plant: PlantData[];
+  id: number;
+}
 
-  const settingsData = {
-    key_id: 'your-key-id',
-    secret_key: 'your-secret-key',
-    plant_id: 'your-plant-id',
-    station_id: 'your-station-id',
-    serial_number: 'your-serial-number',
-    portal_domain: 'your-portal-domain',
-    portal_username: 'your-portal-username',
-    met_office_api_key: 'your-met-office-api-key',
-    lat: 123.45,
-    long: -67.89,
-  };
+const SETTINGS_ENDPOINT = '/settings';
+const API_URL = `${apiUrl}${SETTINGS_ENDPOINT}`;
 
-  const { key_id, secret_key, plant_id, station_id, serial_number, portal_domain, portal_username, met_office_api_key, lat, long } = settingsData;
+const DataComponent: React.FC = () => {
+  const [data, setData] = useState<ApiData | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Use the settings as needed in your component
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+
+        // Check if data exists and has elements
+        if (Array.isArray(data) && data.length > 0) {
+          setData(data[0]);
+        } else {
+          console.error('No data found in the API response.');
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!data) {
+    return <div>No data found.</div>;
+  }
+
+  // ... Inside the return statement ...
+
   return (
     <div>
-      <h2>Settings</h2>
-      <p>KEY_ID: {key_id}</p>
-      <p>SECRET_KEY: {secret_key}</p>
-      <p>PLANT_ID: {plant_id}</p>
-      <p>STATION_ID: {station_id}</p>
-      <p>SERIAL_NUMBER: {serial_number}</p>
-      <p>PORTAL_DOMAIN: {portal_domain}</p>
-      <p>PORTAL_USERNAME: {portal_username}</p>
-      <p>MET_OFFICE_API_KEY: {met_office_api_key}</p>
-      <p>Latitude: {lat}</p>
-      <p>Longitude: {long}</p>
+      <Header/>
+      <div className="data-container"> {/* Apply the CSS class here */}
+        <div>key_id:</div>
+        <div>{data.plant[0]?.KEY_ID ? '***' : 'MISSING'}</div>
+        <div>secret_key:</div>
+        <div>{data.plant[0]?.SECRET_KEY ? '***' : 'MISSING'}</div>
+        <div>plant_id:</div>
+        <div>{data.plant[0]?.PLANT_ID || 'MISSING'}</div>
+        <div>station_id:</div>
+        <div>{data.plant[0]?.STATION_ID || 'MISSING'}</div>
+        <div>serial_number:</div>
+        <div>{data.plant[0]?.SERIAL_NUMBER || 'MISSING'}</div>
+        <div>portal_domain:</div>
+        <div>{data.plant[0]?.PORTAL_DOMAIN || 'MISSING'}</div>
+        <div>portal_username:</div>
+        <div>{data.plant[0]?.PORTAL_USERNAME || 'MISSING'}</div>
+        <div>met_office_api_key:</div>
+        <div>{data.plant[0]?.MET_OFFICE_API_KEY ? '***' : 'MISSING'}</div>
+        <div>latitude:</div>
+        <div>{data.plant[0]?.LAT || 'MISSING'}</div>
+        <div>longitude:</div>
+        <div>{data.plant[0]?.LONG || 'MISSING'}</div>
+      </div>
     </div>
   );
+
 };
 
-export default SettingsScreen;
+export default DataComponent;

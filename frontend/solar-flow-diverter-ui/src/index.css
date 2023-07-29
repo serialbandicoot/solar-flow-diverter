@@ -114,3 +114,69 @@ th {
   justify-content: space-between;
   align-items: center;
 }
+
+/* DataComponent.css */
+.data-container {
+  padding-top: 30px;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 8px;
+  font-size: 22px;
+}
+
+/* Header.css */
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  padding: 20px;
+  background: #F7AD40;
+  width: 100%;
+  color: white;
+}
+
+.settings-link {
+  color: white;
+  text-decoration: none;
+}
+
+.cog-icon-container {
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.cog-icon {
+  font-size: 64px; /* Increased font size (three times) */
+  margin-right: 10px;
+  color: white; /* White color for the cog icon */
+}
+
+/* Header.css */
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  padding: 20px;
+  background: #F7AD40;
+  width: 100%;
+  color: white;
+}
+
+/* Link styles */
+.home-link,
+.settings-link {
+  color: white; /* Set link text color to white */
+  text-decoration: none; /* Remove underline */
+}
+
+/* Disable link hover effect */
+.home-link:hover,
+.settings-link:hover {
+  color: white; /* Set the same link text color as normal state */
+  text-decoration: none; /* Ensure no hover underline */
+  cursor: default; /* Disable pointer cursor on hover */
+}

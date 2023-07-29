@@ -32,8 +32,12 @@ async def get_pv():
     return jsonify(HelperDB().get_last_pv())
 
 @app.route("/v1/5d", methods=["GET"])
-async def get_metoffice_data():
-     return jsonify(HelperDB().get_5day())
+async def get_5d():
+     return jsonify(HelperDB().get_last_5day())
+
+@app.route("/v1/settings", methods=["GET"])
+async def get_settings():
+     return jsonify(HelperDB().get_settings())
 
 @app.after_request
 def after_request(response: Response) -> Response:

@@ -49,7 +49,7 @@ class HelperDB:
 
         store.add(plant)
 
-    def get_5day(self):
+    def get_last_5day(self):
         store = self._get_or_create(Store.MO)
         
         return self._get_last(store)
@@ -58,5 +58,9 @@ class HelperDB:
         store = self._get_or_create(Store.PV)
 
         return self._get_last(store)
+    
+    def get_settings(self):
+        store = self._get_or_create(Store.ST)
 
+        return store.get()
 
