@@ -7,11 +7,21 @@ from src import soliscloud_api
 from aiohttp import ClientSession
 from src.helper_db import HelperDB
 import asyncio
+import logging
+
+# Logger Stuff!
+log_file = '/var/log/pv.log'
+logger = logging.getLogger('pv_logger')
+logger.setLevel(logging.DEBUG)
+file_handler = logging.FileHandler(log_file)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
 EPOC = 10
 
 async def pv():
-    print(f"*** Solar PV Data - {dt.datetime.now()} ***")
+    logger.info(f"*** Solar PV Data - {dt.datetime.now()} ***")
     config_values = load_config()
 
     config = soliscloud_api.SoliscloudConfig(
@@ -54,7 +64,7 @@ async def main():
     schedule = Scheduler()
     schedule.cyclic(dt.timedelta(minutes=EPOC), pv)
     
-    print(schedule)
+    logger.info(schedule)
 
     while True:
         await asyncio.sleep(1)
