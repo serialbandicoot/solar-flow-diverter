@@ -31,7 +31,7 @@ def mo():
 schedule = Scheduler()
 schedule.cyclic(dt.timedelta(minutes=EPOC), mo)
 
-print(schedule)
+logger.info(schedule)
 
 while True:
     schedule.exec_jobs()
