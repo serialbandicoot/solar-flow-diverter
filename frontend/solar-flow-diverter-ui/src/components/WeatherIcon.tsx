@@ -8,6 +8,7 @@ import { ReactComponent as Icon8 } from './icons/8.svg';
 import { ReactComponent as Icon9 } from './icons/9.svg';
 import { ReactComponent as Icon10 } from './icons/10.svg';
 import { ReactComponent as Icon12 } from './icons/12.svg';
+import { ReactComponent as Icon14 } from './icons/14.svg';
 import { ReactComponent as Icon15 } from './icons/15.svg';
 
 interface WeatherIconProps {
@@ -29,6 +30,7 @@ const WeatherIcon: React.FC<WeatherIconProps> = ({ number }) => {
       '9': Icon9,
       '10': Icon10,
       '12': Icon12,
+      '14': Icon14,
       '15': Icon15,
     };
     setIcons(svgComponents);
