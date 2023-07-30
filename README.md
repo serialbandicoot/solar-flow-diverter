@@ -44,6 +44,10 @@ The Solar Flow Diverter is an innovative energy management system that seamlessl
 
 4. MetOffice Weather Data assists the system in predicting weather patterns, ensuring optimal energy distribution based on available sunlight.
 
+## Demo
+
+A working demo of the Solar Flow Diverter is available at [https://solar-flow-diverter.uk](https://solar-flow-diverter.uk).
+
 ## Contributing
 
 Contributions to the Solar Flow Diverter project are highly appreciated. Whether you want to suggest improvements, fix bugs, or add new features, please feel free to submit a pull request. For significant changes, kindly open an issue first to discuss the proposed modifications.
