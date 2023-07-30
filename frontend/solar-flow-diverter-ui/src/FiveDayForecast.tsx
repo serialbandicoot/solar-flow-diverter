@@ -121,7 +121,7 @@ const FiveDayForecast: React.FC<Props> = () => {
   return (
     <div className="componentTop">
       <h2>5 Day Forecast ({locationName})</h2>
-      <table>
+      <table style={{ tableLayout: 'fixed', width: '100%' }}>
         <thead>
           <tr>
             {fiveDayForecast.map((day, index) => {
