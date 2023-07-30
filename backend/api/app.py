@@ -3,10 +3,8 @@
 from dotenv import load_dotenv
 from flask import Flask, Response
 from flask_cors import CORS
-
-from src.metoffer import MetOffer
-from src import metoffer
 from src.helper_db import HelperDB
+import os, json
 
 app = Flask(__name__)
 app.config["CORS_HEADERS"] = "Content-Type"
@@ -38,6 +36,32 @@ async def get_5d():
 @app.route("/v1/settings", methods=["GET"])
 async def get_settings():
      return jsonify(HelperDB().get_settings())
+
+def _read_json_file(file_path):
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+    return data
+
+@app.route("/v1/tank_schedule", methods=["GET"])
+def mock_tank_schedule():
+    # Assuming the 'schedule.json' file is in the 'mock_data' directory
+    file_path = os.path.join("mock_data", "schedule.json")
+    try:
+        data = _read_json_file(file_path)
+        return jsonify(data)
+    except FileNotFoundError:
+        return jsonify({"error": "Schedule data not found"}), 404
+
+@app.route("/v1/tank_latest_measurement", methods=["GET"])
+def mock_tank_latest_measurement():
+    # Assuming the 'latest_measurement.json' file is in the 'mock_data' directory
+    file_path = os.path.join("mock_data", "latest_measurement.json")
+    try:
+        data = _read_json_file(file_path)
+        return jsonify(data)
+    except FileNotFoundError:
+        return jsonify({"error": "Latest measurement data not found"}), 404
+
 
 @app.after_request
 def after_request(response: Response) -> Response:

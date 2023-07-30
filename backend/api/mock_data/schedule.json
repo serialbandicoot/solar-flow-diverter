@@ -1,0 +1,37 @@
+{
+    "ignoreOffpeakSense": true,
+    "defaultHeatSource": "indirect",
+    "schedule": [
+       {
+          "days": [
+             "mon",
+             "tue",
+             "wed",
+             "thu",
+             "sat",
+             "sun"
+          ],
+          "items": [
+             {
+                "set": 75,
+                "time": "02:01",
+                "maintain": {
+                   "off": 60,
+                   "on": 50
+                }
+             }
+          ]
+       }
+    ],
+    "heatSourceSchedule": [
+       {
+          "heatSource": "electric",
+          "startTime": "01:00"
+       },
+       {
+          "heatSource": "indirect",
+          "startTime": "06:00"
+       }
+    ]
+ }
+ 

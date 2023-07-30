@@ -1,10 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { FaCog } from 'react-icons/fa'; 
 
 import SolisInverterDetails from './SolisInverterDetails';
 import FiveDayForecast from './FiveDayForecast'; 
 import Header from './components/Header';
+import MixergyTankData from './components/MixergyTankData';
 
 const Home: React.FC = () => {
 
@@ -13,6 +12,7 @@ const Home: React.FC = () => {
       <Header/>
       <SolisInverterDetails />
       <FiveDayForecast />
+      <MixergyTankData />
     </div>
   );
 };

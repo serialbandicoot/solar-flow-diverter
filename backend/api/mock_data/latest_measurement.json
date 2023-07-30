@@ -1,0 +1,18 @@
+{
+  "recordedTime": 1602681360013,
+  "receivedTime": 1602681376715,
+  "topTemperature": 55.7,
+  "canTemperature": 54,
+  "bottomTemperature": 28,
+  "charge": 34.7,
+  "frequency": 49.9565,
+  "state": {
+    "current": { "heat_source": "Electric", "immersion": "Off" },
+    "heat_source": "Electric",
+    "relay": { "heat_source": "Electric", "immersion": "Off" },
+    "system": "On"
+  },
+  "wifiQuality": 54,
+  "voltage": 239.5,
+  "current": 0
+}
