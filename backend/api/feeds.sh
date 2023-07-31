@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/bash
 
 curl -X GET https://api.solar-flow-diverter.uk/v1/create_pv
 curl -X GET https://api.solar-flow-diverter.uk/v1/create_5d
