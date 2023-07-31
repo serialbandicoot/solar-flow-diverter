@@ -9,3 +9,4 @@ asgiref
 gunicorn
 scheduler
 pysondb
+Flask-APScheduler
