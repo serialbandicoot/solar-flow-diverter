@@ -83,7 +83,7 @@ def mock_tank_latest_measurement():
 @app.route("/v1/create_5d", methods=["GET"])
 def create_5d():
     try:
-        logging.info(f"Get 5d Forecast - {datetime.datetime.now()}")
+        logging.debug(f"Get 5d Forecast - {datetime.datetime.now()}")
         config_values = load_config()
 
         M = metoffer.MetOffer(config_values["met_office_api_key"])
@@ -94,14 +94,14 @@ def create_5d():
         HelperDB().post_5day(bath)
     except Exception as e:
         logging.error(f"FAILED MO - {datetime.datetime.now()} - {e}")
-        return jsonify({"error": "Latest MO Weather data created"}), 404
+        return jsonify({"error": "Failed to create MO Weather data"}), 500
 
     return {"message": "SUCCESS"}
 
 
 @app.route("/v1/create_pv", methods=["GET"])
 async def pv():
-    logging.info(f"Solar PV Data - {datetime.datetime.now()}")
+    logging.debug(f"Solar PV Data - {datetime.datetime.now()}")
     try:
         config_values = load_config()
 
@@ -125,9 +125,9 @@ async def pv():
 
         while retry < max_tries:
             login = await get_data()
-            logging.info(f"login - {login}")
+            logging.debug(f"login result - {login}")
             if login == False or login is None:
-                logging.info(
+                logging.error(
                     f"Failed Login - retry in 5 seconds - {datetime.datetime.now()}"
                 )
                 await asyncio.sleep(10)
@@ -144,7 +144,7 @@ async def pv():
             HelperDB().post_pv(solis_api._data)
     except Exception as e:
         logging.error(f"FAILED PV - {datetime.datetime.now()} - {e}")
-        return jsonify({"error": "Latest PV measurement data created"}), 404
+        return jsonify({"error": "Faied to create latest PV measurement data"}), 500
 
     return {"message": "SUCCESS"}
 
