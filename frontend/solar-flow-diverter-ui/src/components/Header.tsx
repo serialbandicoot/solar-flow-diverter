@@ -7,6 +7,7 @@ import { FaCog } from 'react-icons/fa';
 const Header: React.FC = () => {
   return (
     <header className="header-container">
+      <img src="/light_icon.svg" alt="Icon" width={100}/>
       <Link to="/" className="home-link"> {/* Make the "Solar Flow Diverter" text a link */}
         <h1>Solar Flow Diverter</h1>
       </Link>

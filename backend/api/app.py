@@ -91,6 +91,8 @@ def create_5d():
             float(config_values["lat"]), float(config_values["long"]), metoffer.DAILY
         )
 
+        logging.info(bath)
+
         HelperDB().post_5day(bath)
     except Exception as e:
         logging.error(f"FAILED MO - {datetime.datetime.now()} - {e}")
@@ -137,11 +139,13 @@ async def pv():
 
             retry = retry + 1
 
-        await solis_api.logout()
-        await session.close()
-
         if save_data:
+            logging.info(solis_api._data)
             HelperDB().post_pv(solis_api._data)
+
+        await solis_api.logout()
+        await session.close()  
+
     except Exception as e:
         logging.error(f"FAILED PV - {datetime.datetime.now()} - {e}")
         return jsonify({"error": "Faied to create latest PV measurement data"}), 500

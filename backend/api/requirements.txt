@@ -10,3 +10,4 @@ gunicorn
 scheduler
 pysondb
 Flask-APScheduler
+pytest
