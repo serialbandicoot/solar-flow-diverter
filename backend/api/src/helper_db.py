@@ -1,5 +1,5 @@
 import os, json
-from pysondb import db
+from tinydb import TinyDB, Query
 from enum import Enum
 from datetime import datetime
 
@@ -26,10 +26,10 @@ class HelperDB:
                 f"{store}.json",
             )
         )
-        return db.getDb(db_path)
+        return TinyDB(db_path)
 
     def _get_last(self, store):
-        store = store.getAll()
+        store = store.all()
         if len(store) == 0:
             return None
         return store[len(store) - 1]
@@ -40,7 +40,7 @@ class HelperDB:
         weather["timestamp"] = str(datetime.now())
         weather["fiveDay"] = data
 
-        store.add(weather)
+        store.insert(weather)
 
     def post_pv(self, data):
         store = self._get_or_create(Store.PV)
@@ -48,7 +48,7 @@ class HelperDB:
         plant["timestamp"] = str(datetime.now())
         plant["plant"] = [data]
 
-        store.add(plant)
+        store.insert(plant)
 
     def get_last_5day(self):
         store = self._get_or_create(Store.MO)
@@ -63,4 +63,4 @@ class HelperDB:
     def get_settings(self):
         store = self._get_or_create(Store.ST)
 
-        return store.get()
+        return store.all()
