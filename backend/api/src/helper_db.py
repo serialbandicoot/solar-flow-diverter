@@ -1,5 +1,5 @@
 import os, json
-from tinydb import TinyDB, Query
+from tinydb import Query, TinyDB
 from enum import Enum
 from datetime import datetime
 
@@ -8,6 +8,7 @@ class Store:
     PV = "pv_data_store"
     MO = "mo_data_store"
     ST = "settings_data_store"
+    HS = "home_sensor"
 
     def get_value(color_enum):
         if not isinstance(color_enum, Enum):
@@ -63,4 +64,37 @@ class HelperDB:
     def get_settings(self):
         store = self._get_or_create(Store.ST)
 
-        return store.all()
+        return self._get_last(store)
+
+    def set_nested(self, path, val):
+        def transform(doc):
+            current = doc
+            for key in path[:-1]:
+                current = current[key]
+
+            current[path[-1]] = val
+
+        return transform
+
+    def post_home_activations(self, activate: str, activate_state: bool):
+        store = self._get_or_create(Store.HS)
+        first_and_last_record = self._get_last(store)
+        if first_and_last_record:
+            first_and_last_record["home_sensor"][activate] = activate_state
+        else:
+            first_and_last_record = {}
+            first_and_last_record["home_sensor"] = {
+                "bath": False,
+                "home": False,
+                "water": False,
+                "heating": False,
+            }
+        first_and_last_record["timestamp"] = str(datetime.now())
+        store.update(first_and_last_record, doc_ids=[1])
+
+    def get_home_activations(self, activation=None):
+        store = self._get_or_create(Store.HS)
+        if activation:
+            return {}
+
+        return self._get_last(store)

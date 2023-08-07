@@ -17,6 +17,8 @@ def load_config():
             "met_office_api_key": os.environ.get("MET_OFFICE_API_KEY"),
             "lat": os.environ.get("LAT"),
             "long": os.environ.get("LONG"),
+            "twillio_account_id": os.environ.get("TWILLIO_ACCOUNT_ID"),
+            "twillio_auth_token": os.environ.get("TWILLIO_AUTH_TOKEN"),
         }
     except Exception as e:
         print("Check for missing env", e)

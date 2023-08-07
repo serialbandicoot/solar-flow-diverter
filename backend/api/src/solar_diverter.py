@@ -63,6 +63,6 @@ class SolarDiverter:
 
             if water_reading > water_threshold:
                 if battery_reading <= battery_threshold:
-                    return SelectionOption.BATTERY 
+                    return SelectionOption.BATTERY
 
         return SelectionOption.GRID

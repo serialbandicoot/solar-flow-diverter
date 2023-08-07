@@ -92,7 +92,11 @@ test_data_reversed = [
     (40, 53, 50, 51, "BATTERY", "Water has reached threshold, Battery has not"),
     (51, 51, 50, 50, "GRID", "Battery and Water has reached threshold, default Grid"),
 ]
-@pytest.mark.parametrize("br, wr, bt, wt, expected_priority, comments", test_data_reversed)
+
+
+@pytest.mark.parametrize(
+    "br, wr, bt, wt, expected_priority, comments", test_data_reversed
+)
 def test_all_params_reversed(br, wr, bt, wt, expected_priority, comments):
     sd = SolarDiverter(SelectionOption.WATER, SelectionOption.BATTERY)
 

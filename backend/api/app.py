@@ -3,8 +3,9 @@
 import asyncio
 from aiohttp import ClientSession
 from dotenv import load_dotenv
-from flask import Flask, Response
+from flask import Flask, Response, request
 from flask_cors import CORS
+from src.sms import SMS
 from src import soliscloud_api
 from src.helper_db import HelperDB
 import os, json, logging, datetime
@@ -18,14 +19,14 @@ logging.basicConfig(
 
 app = Flask(__name__)
 app.config["CORS_HEADERS"] = "Content-Type"
-CORS(
-    app,
-    resources={
-        r"/api/*": {
-            "origins": ["http://127.0.0.1:3000", "http://api.solar-flow-diverter.uk"]
-        }
-    },
-)
+resources = {
+    r"/v1/*": {
+        "origins": ["http://127.0.0.1:3000", "http://api.solar-flow-diverter.uk"],
+        "allow_headers": ["Content-Type"],
+    }
+}
+
+CORS(app, resources=resources)
 
 from flask import Flask, jsonify
 from src.soliscloud_api import SoliscloudAPI, SoliscloudConfig
@@ -84,8 +85,8 @@ def mock_tank_latest_measurement():
 def create_5d():
     try:
         logging.debug(f"Get 5d Forecast - {datetime.datetime.now()}")
-        config_values = load_config()
 
+        config_values = load_config()
         M = metoffer.MetOffer(config_values["met_office_api_key"])
         bath = M.nearest_loc_forecast(
             float(config_values["lat"]), float(config_values["long"]), metoffer.DAILY
@@ -106,7 +107,6 @@ async def pv():
     logging.debug(f"Solar PV Data - {datetime.datetime.now()}")
     try:
         config_values = load_config()
-
         config = soliscloud_api.SoliscloudConfig(
             portal_domain=config_values["portal_domain"],
             portal_username=config_values["portal_username"],
@@ -144,18 +144,52 @@ async def pv():
             HelperDB().post_pv(solis_api._data)
 
         await solis_api.logout()
-        await session.close()  
+        await session.close()
 
     except Exception as e:
         logging.error(f"FAILED PV - {datetime.datetime.now()} - {e}")
         return jsonify({"error": "Faied to create latest PV measurement data"}), 500
 
-    return {"message": "SUCCESS"}
+    return jsonify({"message": "SUCCESS"}, 201)
+
+
+@app.route("/v1/activation", methods=["POST"])
+def post_activation():
+    data = request.get_json()
+    activation = data.get("activate")
+    activation_type = data.get("type")
+    if activation_type:
+        try:
+            config_values = load_config()
+            account_id = config_values["twillio_account_id"]
+            auth_token = config_values["twillio_auth_token"]
+            HelperDB().post_home_activations(activation_type, activation)
+            SMS(account_id, auth_token).send(
+                to="+447970062349",
+                message_body=f"{activation_type} is now {activation}",
+            )
+            return jsonify({"message": "SUCCESS"}, 201)
+        except Exception as e:
+            jsonify(
+                {"error": f"Activation type error {activation_type} not found"}
+            ), 500
+
+    return jsonify({"error": f"Activation type {activation_type} not found"}), 404
+
+
+@app.route("/v1/activation", methods=["GET"])
+def get_activation():
+    activation_type = request.args.get("type")
+    if activation_type:
+        return jsonify(HelperDB().get_home_activations(activation_type))
+
+    return jsonify({"error": f"Activation type {activation_type} not found"}), 404
 
 
 @app.after_request
 def after_request(response: Response) -> Response:
     response.access_control_allow_origin = "*"
+    response.access_control_allow_headers = "*"
     return response
 
 
