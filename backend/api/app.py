@@ -171,7 +171,7 @@ def post_activation():
             return jsonify({"message": "SUCCESS"}, 201)
         except Exception as e:
             jsonify(
-                {"error": f"Activation type error {activation_type} not found"}
+                {"error": f"Activation type error {activation_type} not found with error {e}"}
             ), 500
 
     return jsonify({"error": f"Activation type {activation_type} not found"}), 404
