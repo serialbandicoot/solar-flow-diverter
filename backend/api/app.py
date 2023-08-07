@@ -174,7 +174,7 @@ def post_activation():
                 {"error": f"Activation type error {activation_type} not found with error {e}"}
             ), 500
 
-    return jsonify({"error": f"Activation type {activation_type} not found"}), 404
+    return jsonify({"error": f"Activation type {activation_type} not created"}), 404
 
 
 @app.route("/v1/activation", methods=["GET"])
