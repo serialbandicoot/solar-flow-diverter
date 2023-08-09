@@ -179,11 +179,8 @@ def post_activation():
 
 @app.route("/v1/activation", methods=["GET"])
 def get_activation():
-    activation_type = request.args.get("type")
-    if activation_type:
-        return jsonify(HelperDB().get_home_activations(activation_type))
+    return jsonify(HelperDB().get_home_activations()), 200
 
-    return jsonify({"error": f"Activation type {activation_type} not found"}), 404
 
 
 @app.after_request

@@ -92,7 +92,7 @@ class HelperDB:
         first_and_last_record["timestamp"] = str(datetime.now())
         store.update(first_and_last_record, doc_ids=[1])
 
-    def get_home_activations(self):
+    def get_home_activations(self, activation_type: str):
         store = self._get_or_create(Store.HS)
 
         return self._get_last(store)
