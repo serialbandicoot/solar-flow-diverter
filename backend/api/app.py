@@ -138,6 +138,8 @@ def post_activation():
                     "error": f"Activation type error {activation_type} not found with error {e}"
                 }
             ), 500
+    if data.get('home_sensor').get('priority'):
+        return jsonify(HelperDB().post_home_sensor_priority(data.get('home_sensor').get('priority')))
 
     return jsonify({"error": f"Activation type {activation_type} not created"}), 404
 

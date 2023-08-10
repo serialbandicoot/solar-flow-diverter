@@ -66,6 +66,17 @@ class HelperDB:
 
         return self._get_last(store)
 
+    def post_home_sensor_priority(self, priority: str):
+        store = self._get_or_create(Store.HS)
+        first_and_last_record = self._get_last(store)
+        if first_and_last_record:
+            first_and_last_record["home_sensor"]['priority'] = priority
+
+        first_and_last_record["timestamp"] = str(datetime.now())
+        store.update(first_and_last_record, doc_ids=[1])
+
+        return self._get_last(store)
+
     def post_home_activations(self, activate: str, activate_state: bool):
         store = self._get_or_create(Store.HS)
         first_and_last_record = self._get_last(store)

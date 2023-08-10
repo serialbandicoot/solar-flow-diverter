@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { apiUrl } from '../config';
 
-const ACTIVATION_ENDPOINT = '/activation';
+const ACTIVATION_ENDPOINT = '/  ';
 const API_URL = `${apiUrl}${ACTIVATION_ENDPOINT}`;
 
 const HomeSensor: React.FC = () => {
