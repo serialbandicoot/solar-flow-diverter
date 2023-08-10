@@ -2,30 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { apiUrl } from './config';
 import Header from './components/Header';
 
-interface PlantData {
-  KEY_ID: string;
-  SECRET_KEY: string;
-  PLANT_ID: string;
-  STATION_ID: string;
-  SERIAL_NUMBER: string;
-  PORTAL_DOMAIN: string;
-  PORTAL_USERNAME: string;
-  MET_OFFICE_API_KEY: string;
-  LAT: string;
-  LONG: string;
-}
-
-interface ApiData {
-  timestamp: string;
-  plant: PlantData[];
-  id: number;
+interface SettingsData {
+  solis_key_id: string;
+  solis_secret_key: string;
+  solis_plant_id: string;
+  solis_station_id: string;
+  solis_serial_number: string;
+  solis_domain: string;
+  solis_username: string;
+  met_office_api_key: string;
+  lat: string;
+  long: string;
 }
 
 const SETTINGS_ENDPOINT = '/settings';
 const API_URL = `${apiUrl}${SETTINGS_ENDPOINT}`;
 
 const DataComponent: React.FC = () => {
-  const [data, setData] = useState<ApiData | null>(null);
+  const [data, setData] = useState<SettingsData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,8 +29,8 @@ const DataComponent: React.FC = () => {
         const data = await response.json();
 
         // Check if data exists and has elements
-        if (Array.isArray(data) && data.length > 0) {
-          setData(data[0]);
+        if (data) {
+          setData(data);
         } else {
           console.error('No data found in the API response.');
         }
@@ -65,25 +59,25 @@ const DataComponent: React.FC = () => {
       <Header/>
       <div className="data-container"> {/* Apply the CSS class here */}
         <div>key_id:</div>
-        <div>{data.plant[0]?.KEY_ID ? '***' : 'MISSING'}</div>
+        <div>{data.solis_key_id ? '***' : 'MISSING'}</div>
         <div>secret_key:</div>
-        <div>{data.plant[0]?.SECRET_KEY ? '***' : 'MISSING'}</div>
+        <div>{data.solis_secret_key ? '***' : 'MISSING'}</div>
         <div>plant_id:</div>
-        <div>{data.plant[0]?.PLANT_ID || 'MISSING'}</div>
+        <div>{data.solis_plant_id || 'MISSING'}</div>
         <div>station_id:</div>
-        <div>{data.plant[0]?.STATION_ID || 'MISSING'}</div>
+        <div>{data.solis_station_id || 'MISSING'}</div>
         <div>serial_number:</div>
-        <div>{data.plant[0]?.SERIAL_NUMBER || 'MISSING'}</div>
+        <div>{data.solis_serial_number || 'MISSING'}</div>
         <div>portal_domain:</div>
-        <div>{data.plant[0]?.PORTAL_DOMAIN || 'MISSING'}</div>
+        <div>{data.solis_domain || 'MISSING'}</div>
         <div>portal_username:</div>
-        <div>{data.plant[0]?.PORTAL_USERNAME || 'MISSING'}</div>
+        <div>{data.solis_username || 'MISSING'}</div>
         <div>met_office_api_key:</div>
-        <div>{data.plant[0]?.MET_OFFICE_API_KEY ? '***' : 'MISSING'}</div>
+        <div>{data.met_office_api_key ? '***' : 'MISSING'}</div>
         <div>latitude:</div>
-        <div>{data.plant[0]?.LAT || 'MISSING'}</div>
+        <div>{data.lat || 'MISSING'}</div>
         <div>longitude:</div>
-        <div>{data.plant[0]?.LONG || 'MISSING'}</div>
+        <div>{data.long || 'MISSING'}</div>
       </div>
     </div>
   );
