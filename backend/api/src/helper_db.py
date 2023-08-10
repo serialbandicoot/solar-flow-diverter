@@ -7,7 +7,7 @@ from datetime import datetime
 class Store:
     PV = "pv_data_store"
     MO = "mo_data_store"
-    ST = "settings_data_store"
+    ST = "settings"
     HS = "home_sensor"
 
     def get_value(color_enum):
@@ -65,16 +65,6 @@ class HelperDB:
         store = self._get_or_create(Store.ST)
 
         return self._get_last(store)
-
-    def set_nested(self, path, val):
-        def transform(doc):
-            current = doc
-            for key in path[:-1]:
-                current = current[key]
-
-            current[path[-1]] = val
-
-        return transform
 
     def post_home_activations(self, activate: str, activate_state: bool):
         store = self._get_or_create(Store.HS)
