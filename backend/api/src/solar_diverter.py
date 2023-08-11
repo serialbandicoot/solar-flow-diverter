@@ -12,6 +12,9 @@ class SelectionOption(Enum):
     WATER = 2
     GRID = 3
 
+    def to_s(self):
+        return self.name.lower()
+
 
 class SolarDiverterOrder:
     @classmethod
@@ -41,10 +44,10 @@ class SolarDiverter:
 
     def check_priority(
         self,
-        battery_reading=0,
-        water_reading=0,
-        battery_threshold=95,
-        water_threshold=95,
+        battery_reading=0.0,
+        water_reading=0.0,
+        battery_threshold=95.0,
+        water_threshold=95.0,
     ):
         if (
             battery_reading > 100

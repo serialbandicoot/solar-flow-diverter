@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { apiUrl } from '../config';
+import SectionHeader from './SectionHeader';
 
 const ACTIVATION_ENDPOINT = '/activation';
 const API_URL = `${apiUrl}${ACTIVATION_ENDPOINT}`;
@@ -128,43 +129,46 @@ const HomeSensor: React.FC = () => {
   };
 
   return (
-    <div style={containerStyle}>
-      <button
-        style={{
-          ...buttonStyle,
-          background: isHouseClicked ? '#F7AD40' : 'transparent',
-        }}
-        onClick={handleHouseClick}
-      >
-        🏠
-      </button>
-      <button
-        style={{
-          ...buttonStyle,
-          background: isTapClicked ? '#F7AD40' : 'transparent',
-        }}
-        onClick={handleTapClick}
-      >
-        🚰
-      </button>
-      <button
-        style={{
-          ...buttonStyle,
-          background: isBathClicked ? '#F7AD40' : 'transparent',
-        }}
-        onClick={handleBathClick}
-      >
-        🛁
-      </button>
-      <button
-        style={{
-          ...buttonStyle,
-          background: isOnButtonClicked ? '#F7AD40' : 'transparent',
-        }}
-        onClick={handleOnButtonClick}
-      >
-        🔘
-      </button>
+    <div>
+      <SectionHeader title="Notifications" />
+      <div style={containerStyle}>
+        {/* <button
+          style={{
+            ...buttonStyle,
+            background: isHouseClicked ? '#F7AD40' : 'transparent',
+          }}
+          onClick={handleHouseClick}
+        >
+          🏠
+        </button> */}
+        <button
+          style={{
+            ...buttonStyle,
+            background: isTapClicked ? '#F7AD40' : 'transparent',
+          }}
+          onClick={handleTapClick}
+        >
+          🚰
+        </button>
+        <button
+          style={{
+            ...buttonStyle,
+            background: isBathClicked ? '#F7AD40' : 'transparent',
+          }}
+          onClick={handleBathClick}
+        >
+          🛁
+        </button>
+        {/* <button
+          style={{
+            ...buttonStyle,
+            background: isOnButtonClicked ? '#F7AD40' : 'transparent',
+          }}
+          onClick={handleOnButtonClick}
+        >
+          🔘
+        </button> */}
+      </div>
     </div>
   );
 };

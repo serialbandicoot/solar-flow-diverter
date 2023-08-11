@@ -131,7 +131,6 @@ th {
   align-items: center;
   justify-content: space-between;
   text-align: center;
-  padding: 20px;
   background: #F7AD40;
   width: 100%;
   color: white;
@@ -151,19 +150,6 @@ th {
   font-size: 64px; /* Increased font size (three times) */
   margin-right: 10px;
   color: white; /* White color for the cog icon */
-}
-
-/* Header.css */
-
-.header-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  text-align: center;
-  padding: 20px;
-  background: #F7AD40;
-  width: 100%;
-  color: white;
 }
 
 /* Link styles */

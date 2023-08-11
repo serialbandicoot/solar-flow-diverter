@@ -141,9 +141,7 @@ def post_activation():
             ), 500
     if data.get("excess_priority"):
         return jsonify(
-            HelperDB().post_home_sensor_priority(
-                data.get("excess_priority")
-            )
+            HelperDB().post_home_sensor_priority(data.get("excess_priority"))
         )
 
     return jsonify({"error": f"Activation type {activation_type} not created"}), 404
@@ -156,21 +154,26 @@ def get_activation():
 
 @app.route("/v1/solar_diverter", methods=["GET"])
 def solar_diverter():
-    priority = HelperDB().get_home_activations()["home_sensor"]["priority"]
+    excess_priority = HelperDB().get_home_activations()["excess_priority"]
+    battery_threshold = excess_priority["battery_threshold"]
+    water_threshold = excess_priority["water_threshold"]
     battery_reading = HelperDB().get_last_pv()["plant"][0]["remainingCapacity"]
-    order = SolarDiverterOrder().get_order(priority)
-    new_priority = SolarDiverter(order["1"], order["2"]).check_priority(
-        battery_reading=battery_reading,
-        battery_threshold=45
+    order = excess_priority["order"]
+    full_order = SolarDiverterOrder().get_order(order)
+
+    new_priority = SolarDiverter(full_order["1"], full_order["2"]).check_priority(
+        battery_reading,
+        battery_threshold=battery_threshold,
+        water_threshold=water_threshold,
     )
 
     return (
         jsonify(
             {
                 "success": "OK",
-                "priority": priority,
+                "priority": order,
                 "battery_reading": battery_reading,
-                "new_priority": new_priority.value,
+                "new_priority": new_priority.to_s(),
             }
         ),
         200,
