@@ -11,6 +11,7 @@ from src.helper_db import HelperDB
 import os, json, logging, datetime
 from src import metoffer
 from src.soliscloud_helper import SolisCloudHelper
+from src.solar_diverter import SolarDiverter, SolarDiverterOrder
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -131,15 +132,19 @@ def post_activation():
                 to="+447970062349",
                 message_body=f"{activation_type} is now {activation}",
             )
-            return jsonify({"message": "SUCCESS"}, 201)
+            return jsonify({"message": "SUCCESS"}), 200
         except Exception as e:
             jsonify(
                 {
                     "error": f"Activation type error {activation_type} not found with error {e}"
                 }
             ), 500
-    if data.get('home_sensor').get('priority'):
-        return jsonify(HelperDB().post_home_sensor_priority(data.get('home_sensor').get('priority')))
+    if data.get("excess_priority"):
+        return jsonify(
+            HelperDB().post_home_sensor_priority(
+                data.get("excess_priority")
+            )
+        )
 
     return jsonify({"error": f"Activation type {activation_type} not created"}), 404
 
@@ -147,6 +152,29 @@ def post_activation():
 @app.route("/v1/activation", methods=["GET"])
 def get_activation():
     return jsonify(HelperDB().get_home_activations()), 200
+
+
+@app.route("/v1/solar_diverter", methods=["GET"])
+def solar_diverter():
+    priority = HelperDB().get_home_activations()["home_sensor"]["priority"]
+    battery_reading = HelperDB().get_last_pv()["plant"][0]["remainingCapacity"]
+    order = SolarDiverterOrder().get_order(priority)
+    new_priority = SolarDiverter(order["1"], order["2"]).check_priority(
+        battery_reading=battery_reading,
+        battery_threshold=45
+    )
+
+    return (
+        jsonify(
+            {
+                "success": "OK",
+                "priority": priority,
+                "battery_reading": battery_reading,
+                "new_priority": new_priority.value,
+            }
+        ),
+        200,
+    )
 
 
 @app.after_request

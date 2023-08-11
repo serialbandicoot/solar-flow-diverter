@@ -66,11 +66,13 @@ class HelperDB:
 
         return self._get_last(store)
 
-    def post_home_sensor_priority(self, priority: str):
+    def post_home_sensor_priority(self, excess_priority: {}):
         store = self._get_or_create(Store.HS)
         first_and_last_record = self._get_last(store)
         if first_and_last_record:
-            first_and_last_record["home_sensor"]['priority'] = priority
+            first_and_last_record["excess_priority"]["order"] = excess_priority['order']
+            first_and_last_record["excess_priority"]["battery_threshold"] = excess_priority['battery_threshold']
+            first_and_last_record["excess_priority"]["water_threshold"] = excess_priority['water_threshold']
 
         first_and_last_record["timestamp"] = str(datetime.now())
         store.update(first_and_last_record, doc_ids=[1])

@@ -8,12 +8,19 @@ from flask import jsonify
 from .soliscloud_api import SoliscloudConfig, SoliscloudAPI
 from .helper_db import HelperDB
 
-class SolisCloudHelper:
 
+class SolisCloudHelper:
     @classmethod
-    async def get_latest_pv(cls, portal_domain, portal_username, portal_key_id, portal_secret, portal_plantid):
+    async def get_latest_pv(
+        cls,
+        portal_domain,
+        portal_username,
+        portal_key_id,
+        portal_secret,
+        portal_plantid,
+    ):
         logging.debug(f"Solar PV Data - {datetime.now()}")
-        
+
         try:
             config = SoliscloudConfig(
                 portal_domain,

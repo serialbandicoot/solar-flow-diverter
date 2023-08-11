@@ -13,6 +13,22 @@ class SelectionOption(Enum):
     GRID = 3
 
 
+class SolarDiverterOrder:
+    @classmethod
+    def get_order(cls, first: str):
+        order = {
+            "1": SelectionOption.BATTERY,
+            "2": SelectionOption.WATER,
+            "3": SelectionOption.GRID,
+        }
+
+        if first == "water_tank":
+            order["1"] = (SelectionOption.WATER,)
+            order["2"] = (SelectionOption.BATTERY,)
+
+        return order
+
+
 class SolarDiverter:
     def __init__(
         self, priority_one=SelectionOption.BATTERY, priority_two=SelectionOption.WATER
