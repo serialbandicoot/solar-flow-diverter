@@ -151,7 +151,7 @@ const HomeSensorPrioritySelector: React.FC = () => {
             cursor: 'pointer',
           }}
         >
-          {isSubmitting ? '...' : 'Submit'}
+          {isSubmitting ? '...' : 'Update'}
         </button>
       </div>
     </div>

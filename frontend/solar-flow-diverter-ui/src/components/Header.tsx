@@ -8,7 +8,7 @@ const Header: React.FC = () => {
   return (
     <header className="header-container">
       <Link to="/" style={{ textDecoration: 'none' }}>
-        <img src="/light_icon.svg" alt="Icon" width={50} style={{ paddingLeft: '20px' }} />
+        <img src="/light_icon.svg" alt="Icon" width={60} style={{ paddingLeft: '20px' }} />
       </Link>
       <Link to="/" className="home-link"> {/* Make the "Solar Flow Diverter" text a link */}
         <h1>Solar Flow Diverter</h1>
