@@ -179,8 +179,8 @@ def solar_diverter():
         200,
     )
 
-@app.route('/v1/get_sunset_sunrise', methods=['GET'])
-def get_sunset_sunrise():
+@app.route('/v1/store_sunset_sunrise', methods=['GET'])
+def store_sunset_sunrise():
     try:
         # Make a request to the sunrise and sunset API
         response = requests.get('https://api.sunrisesunset.io/json?lat=51.358433&lng=-2.374655')
