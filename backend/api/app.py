@@ -8,7 +8,7 @@ from flask_cors import CORS
 from src.sms import SMS
 from src import soliscloud_api
 from src.helper_db import HelperDB
-import os, json, logging, datetime
+import os, json, logging, datetime, requests
 from src import metoffer
 from src.soliscloud_helper import SolisCloudHelper
 from src.solar_diverter import SolarDiverter, SolarDiverterOrder
