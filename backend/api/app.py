@@ -191,10 +191,10 @@ def post_sunrise_sunset():
 
 @app.route("/v1/sunrise_sunset", methods=["GET"])
 def get_sunrise_sunset():
-    ss_data = HelperDB().get_last_sunrise_sunset()
-    if ss_data is None:
+    last_sunrise_sunset = HelperDB().get_last_sunrise_sunset()
+    if last_sunrise_sunset is None:
         return jsonify({'error': 'Sunrise data not found'}), 404
-    return jsonify(sunrise_data), 200
+    return jsonify(last_sunrise_sunset), 200
 
 @app.after_request
 def after_request(response: Response) -> Response:
