@@ -189,6 +189,13 @@ def post_sunrise_sunset():
     except Exception as e:
         return jsonify({'message': 'An error occurred', 'error': str(e)}), 500
 
+@app.route("/v1/sunrise_sunset", methods=["GET"])
+def get_sunrise():
+    ss_data = HelperDB().get_sunrise_sunset()
+    if ss_data is None:
+        return jsonify({'error': 'Sunrise data not found'}), 404
+    return jsonify(sunrise_data), 200
+
 @app.after_request
 def after_request(response: Response) -> Response:
     response.access_control_allow_origin = "*"
