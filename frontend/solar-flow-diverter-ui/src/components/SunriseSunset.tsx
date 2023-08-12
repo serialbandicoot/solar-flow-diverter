@@ -21,9 +21,12 @@ const SunInfoComponent: React.FC = () => {
   const [sunriseSunsetData, setSunriseSunsetData] = useState<SunriseSunsetData | null>(null);
 
   useEffect(() => {
+    const SUNRISE_SUNSET_ENDPOINT = '/sunrise_sunset';
+    const API_URL = `${apiUrl}${SUNRISE_SUNSET_ENDPOINT}`; // Replace apiUrl with the actual API URL
+
     async function fetchSunriseSunsetData() {
       try {
-        const response = await fetch('https://api.sunrisesunset.io/json?lat=51.358433&lng=-2.374655');
+        const response = await fetch(API_URL); // Use the API_URL variable here
         const data: SunriseSunsetData = await response.json();
         setSunriseSunsetData(data);
       } catch (error) {
@@ -51,3 +54,4 @@ const SunInfoComponent: React.FC = () => {
 };
 
 export default SunInfoComponent;
+
