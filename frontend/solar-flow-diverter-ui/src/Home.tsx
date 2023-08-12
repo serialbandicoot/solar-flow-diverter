@@ -5,7 +5,7 @@ import FiveDayForecast from './FiveDayForecast';
 import Header from './components/Header';
 import MixergyTankData from './components/MixergyTankData';
 import HomeSensor from './components/HomeSensor';
-import HomeSensor from './components/SunriseSunset';
+import SunriseSunset from './components/SunriseSunset';
 
 const Home: React.FC = () => {
 
