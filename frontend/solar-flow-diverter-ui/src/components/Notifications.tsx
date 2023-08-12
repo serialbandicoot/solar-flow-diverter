@@ -7,7 +7,6 @@ const API_URL = `${apiUrl}${ACTIVATION_ENDPOINT}`;
 
 const HomeSensor: React.FC = () => {
   const containerStyle: React.CSSProperties = {
-    marginLeft: '20px',
     marginTop: '20px',
     display: 'grid',
     gridTemplateColumns: 'repeat(2, 1fr)',

@@ -67,6 +67,7 @@ const WEATHER_CODES: { [key: string]: string } = {
 
 const FiveDayForecast: React.FC<Props> = () => {
   
+  const [lastWeatherTimeStamp, setLastWeatherTimeStamp] = useState<string>('');
   const [weatherData, setWeatherData] = useState<PeriodData[]>([]);
   const [locationName, setLocationName] = useState<string>('');
 
@@ -79,8 +80,10 @@ const FiveDayForecast: React.FC<Props> = () => {
         }
         const data = await response.json(); 
         const locationName = data.fiveDay.SiteRep.DV.Location.name;
+        const timeStamp = data.timestamp
         setLocationName(locationName);
         setWeatherData(data.fiveDay.SiteRep.DV.Location.Period); 
+        setLastWeatherTimeStamp(timeStamp)
       } catch (error) {
         console.error('Error fetching weather data:', error);
       }    };
@@ -118,13 +121,27 @@ const FiveDayForecast: React.FC<Props> = () => {
     };
   }, []);
 
+  function toTitleCase(str: string): string {
+    return str.replace(/\w\S*/g, (txt) => {
+      return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
+    });
+  }
+
+  const parseDate = (inputDate: string): String => {
+    const dateObj = new Date(inputDate);
+    return dateObj.toLocaleTimeString('en', {
+      hour: 'numeric',
+      minute: '2-digit'
+    });
+  };
+
   return (
     <div className="componentTop">
-      <h2>5 Day Forecast ({locationName})</h2>
+      <h2>5 Day Forecast ({toTitleCase(locationName)} - {lastWeatherTimeStamp && parseDate(lastWeatherTimeStamp)})</h2>
       <table style={{ tableLayout: 'fixed', width: '100%' }}>
         <thead>
           <tr>
-            {fiveDayForecast.map((day, index) => {
+            {fiveDayForecast.map((_, index) => {
               const today = new Date();
               const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + index);
               const dayOfWeek = days[currentDate.getDay()];
