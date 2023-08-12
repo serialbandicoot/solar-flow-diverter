@@ -9,6 +9,7 @@ class Store:
     MO = "mo_data_store"
     ST = "settings"
     HS = "home_sensor"
+    SS = "sunrise_sunset_data_store"
 
     def get_value(color_enum):
         if not isinstance(color_enum, Enum):
@@ -99,6 +100,19 @@ class HelperDB:
         first_and_last_record["timestamp"] = str(datetime.now())
         store.update(first_and_last_record, doc_ids=[1])
 
+    def post_sunrise_sunset(self, data):
+        store = self._get_or_create(Store.SS)
+        sunrise_sunset = {}
+        sunrise_sunset["timestamp"] = str(datetime.now())
+        sunrise_sunset["sunrise_sunset"] = data
+
+        store.insert(sunrise_sunset)
+
+    def get_last_sunrise_sunset(self):
+        store = self._get_or_create(Store.SS)
+
+        return self._get_last(store)
+    
     def get_home_activations(self):
         store = self._get_or_create(Store.HS)
 
