@@ -179,6 +179,20 @@ def solar_diverter():
         200,
     )
 
+@app.route('/v1/get_sunset_sunrise', methods=['GET'])
+def get_sunset_sunrise():
+    try:
+        # Make a request to the sunrise and sunset API
+        response = requests.get('https://api.sunrisesunset.io/json?lat=51.358433&lng=-2.374655')
+        data = response.json()
+
+        # Call the method directly on the instantiated object
+        HelperDB().post_sunset_suntime(data)
+
+        return jsonify({'message': 'Data successfully posted to the database'}), 200
+    except Exception as e:
+        return jsonify({'message': 'An error occurred', 'error': str(e)}), 500
+
 
 @app.after_request
 def after_request(response: Response) -> Response:
