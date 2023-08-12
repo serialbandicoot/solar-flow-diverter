@@ -9,7 +9,7 @@ class Store:
     MO = "mo_data_store"
     ST = "settings"
     HS = "home_sensor"
-    SS = "sunrise_sunset_data_store"
+    SS = "sunrise_sunset"
 
     def get_value(color_enum):
         if not isinstance(color_enum, Enum):
