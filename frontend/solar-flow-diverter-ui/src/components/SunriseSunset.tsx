@@ -1,33 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { apiUrl } from '../config';
 
-interface SunriseSunsetData {
-  results: {
-    sunrise: string;
-    sunset: string;
-    first_light: string;
-    last_light: string;
-    dawn: string;
-    dusk: string;
-    solar_noon: string;
-    golden_hour: string;
-    day_length: string;
-    timezone: string;
-    utc_offset: number;
-  };
+const SUNRISE_SUNSET_ENDPOINT = '/sunrise_sunset';
+const API_URL = `${apiUrl}${SUNRISE_SUNSET_ENDPOINT}`; 
+
+interface SunriseSunsetResult {
+  dawn: string;
+  day_length: string;
+  dusk: string;
+  first_light: string;
+  golden_hour: string;
+  last_light: string;
+  solar_noon: string;
+  sunrise: string;
+  sunset: string;
+  timezone: string;
+  utc_offset: number;
+}
+
+interface SunriseSunsetResponse {
+  results: SunriseSunsetResult;
   status: string;
+}
+
+interface SunriseSunsetData {
+  sunrise_sunset: SunriseSunsetResponse;
+  timestamp: string;
 }
 
 const SunInfoComponent: React.FC = () => {
   const [sunriseSunsetData, setSunriseSunsetData] = useState<SunriseSunsetData | null>(null);
 
   useEffect(() => {
-    const SUNRISE_SUNSET_ENDPOINT = '/sunrise_sunset';
-    const API_URL = `${apiUrl}${SUNRISE_SUNSET_ENDPOINT}`; // Replace apiUrl with the actual API URL
-
     async function fetchSunriseSunsetData() {
       try {
-        const response = await fetch(API_URL); // Use the API_URL variable here
+        const response = await fetch(API_URL);
         const data: SunriseSunsetData = await response.json();
         setSunriseSunsetData(data);
       } catch (error) {
@@ -42,11 +49,38 @@ const SunInfoComponent: React.FC = () => {
     <div>
       <h2>Sunrise and Sunset Times</h2>
       {sunriseSunsetData ? (
-        <div>
-          <p>Sunrise: {sunriseSunsetData.results.sunrise}</p>
-          <p>Sunset: {sunriseSunsetData.results.sunset}</p>
-          <p>Day Length: {sunriseSunsetData.results.day_length}</p>
-        </div>
+        <table style={{ tableLayout: 'fixed', width: '100%' }}>
+          <thead>
+            <tr>
+              <th>
+                <div>
+                  🌅 Sunrise
+                </div>
+              </th>
+              <th>
+                <div>
+                  🌇 Sunset
+                </div>
+              </th>
+              <th>
+                <div>
+                 📆 Day Length
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div>
+                  {sunriseSunsetData.sunrise_sunset.results.sunrise}
+                </div>
+              </td>
+              <td>{sunriseSunsetData.sunrise_sunset.results.sunset}</td>
+              <td>{sunriseSunsetData.sunrise_sunset.results.day_length}</td>
+            </tr>
+          </tbody>
+        </table>
       ) : (
         <p>Loading sunrise and sunset data...</p>
       )}
@@ -55,4 +89,3 @@ const SunInfoComponent: React.FC = () => {
 };
 
 export default SunInfoComponent;
-

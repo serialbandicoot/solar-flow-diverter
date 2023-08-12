@@ -14,9 +14,9 @@ const Home: React.FC = () => {
       <Header/>
       <SolisInverterDetails />
       <FiveDayForecast />
+      <SunriseSunset />
       <MixergyTankData />
       <HomeSensor />
-      <SunriseSunset />
     </div>
   );
 };

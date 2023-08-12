@@ -179,10 +179,11 @@ def solar_diverter():
         200,
     )
 
-@app.route('/v1/post_sunrise_sunset', methods=['GET'])  # Changed to POST and prefixed with /v1
+@app.route('/v1/sunrise_sunset', methods=['POST'])  
 def post_sunrise_sunset():
     try:
-        response = requests.get('https://api.sunrisesunset.io/json?lat=51.358433&lng=-2.374655')
+        config = HelperDB().get_settings()
+        response = requests.get(f"https://api.sunrisesunset.io/json?lat={config['lat']}&lng={config['long']}")
         data = response.json()
         HelperDB().post_sunrise_sunset(data)
         return jsonify({'message': 'Data successfully posted to the database'}), 200
