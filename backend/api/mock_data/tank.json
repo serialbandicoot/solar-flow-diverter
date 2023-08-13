@@ -1,55 +1,43 @@
-  {
+{
     "serialNumber": "MX000000",
-    "permissions":
-  [
-     "ManageSettings",
-     "ViewSchedule",
-     "ManageSchedule",
-     "ViewData",
-     "ViewSettings",
-     "Control"
-  ],
-  "_links":
-  {
-     "self":
-     {
-       "href": "<endpoint url>"
-     },
-     "schedule":
-     {
-       "href": "<endpoint url>"
-     },
-     "settings":
-     {
-       "href": "<endpoint url>"
-     },
-     "control":
-     {
-       "href": "<endpoint url>"
-     },
-     "measurements":
-     {
-        "href": "<endpoint url>"
-     },
-     "earliest_measurement":
-     {
-        "href": "<endpoint url>"
-     },
-     "latest_measurement":
-     {
-        "href": "<endpoint url>" 
-    }, 
-     "events":
-     {
-       "href": "<endpoint url>"
-     },
-     "earliest_event":
-     {
-       "href": "<endpoint url>"
-     },
-     "latest_event":
-     {
-       "href": "<endpoint url>"
-     }
-  }
+    "permissions": [
+        "ManageSettings",
+        "ViewSchedule",
+        "ManageSchedule",
+        "ViewData",
+        "ViewSettings",
+        "Control"
+    ],
+    "_links": {
+        "self": {
+            "href": "<endpoint url>"
+        },
+        "schedule": {
+            "href": "<endpoint url>"
+        },
+        "settings": {
+            "href": "<endpoint url>"
+        },
+        "control": {
+            "href": "<endpoint url>"
+        },
+        "measurements": {
+            "href": "<endpoint url>"
+        },
+        "earliest_measurement": {
+            "href": "<endpoint url>"
+        },
+        "latest_measurement": {
+            "href": "<endpoint url>"
+        },
+        "events": {
+            "href": "<endpoint url>"
+        },
+        "earliest_event": {
+            "href": "<endpoint url>"
+        },
+        "latest_event": {
+            "href": "<endpoint url>"
+        }
+    }
 }
