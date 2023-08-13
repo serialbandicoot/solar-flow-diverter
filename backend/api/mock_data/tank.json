@@ -1,5 +1,6 @@
-  "serialNumber": "MX000000",
-  "permissions":
+  {
+    "serialNumber": "MX000000",
+    "permissions":
   [
      "ManageSettings",
      "ViewSchedule",
