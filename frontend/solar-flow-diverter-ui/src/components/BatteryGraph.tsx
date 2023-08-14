@@ -64,6 +64,7 @@ export function BatteryGraph() {
 
   const labels = chartData.map(entry => entry.timestamp);
   const remainingCapacityData = chartData.map(entry => entry.remainingCapacity);
+  console.log(remainingCapacityData, labels)
 
   const updatedChartData = {
     labels,

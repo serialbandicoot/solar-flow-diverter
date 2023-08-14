@@ -62,8 +62,20 @@ class HelperDB:
 
         return self._get_last(store)
     
+    
     def get_pv(self):
-        return self._get_or_create(Store.PV).all()
+
+        def extract_timestamp_and_capacity(data):
+            extracted_data = list(map(lambda entry: {
+                "timestamp": entry["timestamp"],
+                "remainingCapacity": entry["plant"][0]["remainingCapacity"]
+            }, data))
+
+            return extracted_data
+
+        remaing_capacity_data = extract_timestamp_and_capacity(self._get_or_create(Store.PV).all())
+
+        return remaing_capacity_data
 
     def get_settings(self):
         store = self._get_or_create(Store.ST)
