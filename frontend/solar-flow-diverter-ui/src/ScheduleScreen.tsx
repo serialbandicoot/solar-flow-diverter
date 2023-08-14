@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { apiUrl } from './config';
+import Header from './components/Header';
 import { BatteryGraph } from './components/BatteryGraph';
 
 const ScheduleScreen: React.FC = () => {
@@ -38,9 +39,7 @@ const ScheduleScreen: React.FC = () => {
 
   return (
     <div>
-      <h1>Hello Schedule</h1>
-      <p>Data from the API: {data.toString()}</p>
-      <p>Data from the API: {time}</p>
+      <Header />
       <BatteryGraph />
     </div>
   );
