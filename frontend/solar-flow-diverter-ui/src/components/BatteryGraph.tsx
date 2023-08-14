@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,7 +10,6 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { faker } from '@faker-js/faker';
 
 ChartJS.register(
   CategoryScale,
@@ -35,26 +34,44 @@ export const options = {
   },
 };
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'Dataset 2',
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
-};
+interface ChartData {
+  timestamp: string;
+  remainingCapacity: number;
+  // Add more properties if needed
+}
 
 export function BatteryGraph() {
-  return <Line options={options} data={data} />;
+  const initialChartData: ChartData[] = [];
+  const [chartData, setChartData] = useState(initialChartData);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('http://localhost:5000/v1/all_pv');
+        const fetchedData: ChartData[] = await response.json();
+        setChartData(fetchedData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    
+    fetchData();
+  }, []);
+
+  const labels = chartData.map(entry => entry.timestamp);
+  const remainingCapacityData = chartData.map(entry => entry.remainingCapacity);
+
+  const updatedChartData = {
+    labels,
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: remainingCapacityData,
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+    ],
+  };
+
+  return <Line options={options} data={updatedChartData} />;
 }
