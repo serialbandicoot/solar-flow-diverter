@@ -10,6 +10,10 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { apiUrl } from '../config';
+
+const ALL_PV_ENDPOINT = '/all_pv';
+const API_URL = `${apiUrl}${ALL_PV_ENDPOINT}`;
 
 ChartJS.register(
   CategoryScale,
@@ -47,7 +51,7 @@ export function BatteryGraph() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://localhost:5000/v1/all_pv');
+        const response = await fetch(API_URL);
         const fetchedData: ChartData[] = await response.json();
         setChartData(fetchedData);
       } catch (error) {
