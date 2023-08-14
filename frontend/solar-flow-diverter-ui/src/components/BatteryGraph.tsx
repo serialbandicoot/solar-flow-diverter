@@ -44,7 +44,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Chart.js Line Chart',
+      text: 'Daily Battery Usage',
     },
   },
 };
@@ -89,7 +89,7 @@ export function BatteryGraph() {
     labels,
     datasets: [
       {
-        label: 'Dataset 1',
+        label: 'Battery',
         data: remainingCapacityData,
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
