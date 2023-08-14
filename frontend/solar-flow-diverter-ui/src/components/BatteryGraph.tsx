@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Chart as ChartJS,
+  CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -15,6 +16,7 @@ const ALL_PV_ENDPOINT = '/all_pv';
 const API_URL = `${apiUrl}${ALL_PV_ENDPOINT}`;
 
 ChartJS.register(
+  CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -26,9 +28,14 @@ ChartJS.register(
 export const options = {
   responsive: true,
   scales: {
-    x: {
-      beginAtZero: true,
-      max: 100,
+    y: {
+      display: true,
+      title: {
+        display: true,
+        text: 'Battery Percentage', 
+      },
+      min: 0, // Set the minimum value of x-axis
+      max: 100, // Set the maximum value of x-axis
     },
   },
   plugins: {
@@ -66,9 +73,17 @@ export function BatteryGraph() {
     fetchData();
   }, []);
 
-  const labels = chartData.map((_entry, index) => index * 100 / (chartData.length - 1));
-  const remainingCapacityData = chartData.map(entry => entry.remainingCapacity);
+  function getTime(dateString: string): string {
+    const dateObject: Date = new Date(dateString);
+    const formattedTime: string = `${dateObject.getHours()}:${String(dateObject.getMinutes()).padStart(2, '0')}`;
+    return formattedTime;
+  }
+
+  const labels = chartData.map(entry => getTime(entry.timestamp));
+  const remainingCapacityData = chartData.map(entry => entry.remainingCapacity)
   console.log(remainingCapacityData, labels)
+
+
 
   const updatedChartData = {
     labels,
