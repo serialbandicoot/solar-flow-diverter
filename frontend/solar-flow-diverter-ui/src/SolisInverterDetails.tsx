@@ -81,7 +81,7 @@ const SolisInverterDetails: React.FC = () => {
 
   return (
     <div className="componentTop">
-      <h2>Inverter Details - ({data && parseDate(data.timestamp)})</h2>
+      <h2>Inverter Details - {data && parseDate(data.timestamp)}</h2>
       <table>
         <thead>
           <tr>

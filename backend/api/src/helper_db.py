@@ -61,6 +61,9 @@ class HelperDB:
         store = self._get_or_create(Store.PV)
 
         return self._get_last(store)
+    
+    def get_pv(self):
+        return self._get_or_create(Store.PV).all()
 
     def get_settings(self):
         store = self._get_or_create(Store.ST)
@@ -112,7 +115,7 @@ class HelperDB:
         store = self._get_or_create(Store.SS)
 
         return self._get_last(store)
-    
+
     def get_home_activations(self):
         store = self._get_or_create(Store.HS)
 

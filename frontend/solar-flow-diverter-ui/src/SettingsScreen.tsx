@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { apiUrl } from './config';
 import Header from './components/Header';
 import HomeSensorPrioritySelector from './components/HomeSensorPrioritySelector';
+import { Link } from 'react-router-dom';
 
 interface SettingsData {
   solis_key_id?: string;
@@ -84,6 +85,19 @@ const DataComponent: React.FC = () => {
     return <div>No data found.</div>;
   }
 
+
+  const linkStyle: React.CSSProperties = {
+    display: 'inline-block',
+    padding: '10px 20px',
+    backgroundColor: '#F7AD40',
+    color: 'white',
+    fontSize: '22px',
+    textDecoration: 'none',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  };
+
   return (
     <div>
       <Header />
@@ -150,6 +164,9 @@ const DataComponent: React.FC = () => {
         <div>Excess Priority -&gt;</div>
         <HomeSensorPrioritySelector />
       </div>
+      <Link to="/schedule" style={linkStyle}>
+        Go to Schedule
+      </Link>
     </div>
   );
 };

@@ -7,7 +7,7 @@ import MixergyTankData from './components/MixergyTankData';
 import HomeSensor from './components/Notifications';
 import SunriseSunset from './components/SunriseSunset';
 
-const Home: React.FC = () => {
+const HomeScreen: React.FC = () => {
 
   return (
     <div>
@@ -21,4 +21,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default HomeScreen;

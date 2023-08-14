@@ -50,6 +50,9 @@ def get_home():
 def get_pv():
     return jsonify(HelperDB().get_last_pv())
 
+@app.route("/v1/all_pv", methods=["GET"])
+def get_all_pv():
+    return jsonify(HelperDB().get_pv())
 
 @app.route("/v1/5d", methods=["GET"])
 def get_5d():
@@ -179,23 +182,34 @@ def solar_diverter():
         200,
     )
 
-@app.route('/v1/sunrise_sunset', methods=['POST'])  
+
+@app.route("/v1/sunrise_sunset", methods=["POST"])
 def post_sunrise_sunset():
     try:
         config = HelperDB().get_settings()
-        response = requests.get(f"https://api.sunrisesunset.io/json?lat={config['lat']}&lng={config['long']}")
+        response = requests.get(
+            f"https://api.sunrisesunset.io/json?lat={config['lat']}&lng={config['long']}"
+        )
         data = response.json()
         HelperDB().post_sunrise_sunset(data)
-        return jsonify({'message': 'Data successfully posted to the database'}), 200
+        return jsonify({"message": "Data successfully posted to the database"}), 200
     except Exception as e:
-        return jsonify({'message': 'An error occurred', 'error': str(e)}), 500
+        return jsonify({"message": "An error occurred", "error": str(e)}), 500
+
 
 @app.route("/v1/sunrise_sunset", methods=["GET"])
 def get_sunrise_sunset():
     last_sunrise_sunset = HelperDB().get_last_sunrise_sunset()
     if last_sunrise_sunset is None:
-        return jsonify({'error': 'Sunrise data not found'}), 404
+        return jsonify({"error": "Sunrise data not found"}), 404
     return jsonify(last_sunrise_sunset), 200
+
+
+@app.route("/v1/schedule", methods=["GET"])
+def get_schedule():
+    schedule_data = {"hello": "world"}
+    return jsonify(schedule_data)
+
 
 @app.after_request
 def after_request(response: Response) -> Response:

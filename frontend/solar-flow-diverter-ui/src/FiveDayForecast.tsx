@@ -137,7 +137,7 @@ const FiveDayForecast: React.FC<Props> = () => {
 
   return (
     <div className="componentTop">
-      <h2>5 Day Forecast ({toTitleCase(locationName)} - {lastWeatherTimeStamp && parseDate(lastWeatherTimeStamp)})</h2>
+      <h2>5 Day Forecast ({toTitleCase(locationName)} at {lastWeatherTimeStamp && parseDate(lastWeatherTimeStamp)})</h2>
       <table style={{ tableLayout: 'fixed', width: '100%' }}>
         <thead>
           <tr>
