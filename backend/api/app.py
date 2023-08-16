@@ -50,9 +50,11 @@ def get_home():
 def get_pv():
     return jsonify(HelperDB().get_last_pv())
 
+
 @app.route("/v1/all_pv", methods=["GET"])
 def get_all_pv():
     return jsonify(HelperDB().get_pv())
+
 
 @app.route("/v1/5d", methods=["GET"])
 def get_5d():

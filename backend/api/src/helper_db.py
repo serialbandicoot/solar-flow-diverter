@@ -1,7 +1,7 @@
 import os, json
 from tinydb import Query, TinyDB
 from enum import Enum
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class Store:
@@ -61,29 +61,42 @@ class HelperDB:
         store = self._get_or_create(Store.PV)
 
         return self._get_last(store)
-    
-    
-    def get_pv(self):
 
-        from datetime import datetime, timedelta
+    def get_pv(self):
 
         def get_measurement_within_24_hours(data):
             current_time = datetime.now()
-            start_time = datetime(current_time.year, current_time.month, current_time.day - 1, 12, 0, 0)
-            end_time = current_time
-            filtered_data = [measurement for measurement in data if start_time <= datetime.strptime(measurement['timestamp'], "%Y-%m-%d %H:%M:%S.%f") <= end_time]
-           
+            start_time = datetime(
+                current_time.year, current_time.month, current_time.day, 0, 0, 0
+            )
+            end_time = start_time + timedelta(days=1)
+            filtered_data = [
+                measurement
+                for measurement in data
+                if start_time
+                <= datetime.strptime(measurement["timestamp"], "%Y-%m-%d %H:%M:%S.%f")
+                < end_time
+            ]
+
             return filtered_data
 
+
         def extract_timestamp_and_capacity(data):
-            extracted_data = list(map(lambda entry: {
-                "timestamp": entry["timestamp"],
-                "remainingCapacity": entry["plant"][0]["remainingCapacity"]
-            }, data))
+            extracted_data = list(
+                map(
+                    lambda entry: {
+                        "timestamp": entry["timestamp"],
+                        "remainingCapacity": entry["plant"][0]["remainingCapacity"],
+                    },
+                    data,
+                )
+            )
 
             return extracted_data
 
-        remaing_capacity_data = extract_timestamp_and_capacity(self._get_or_create(Store.PV).all())
+        remaing_capacity_data = extract_timestamp_and_capacity(
+            self._get_or_create(Store.PV).all()
+        )
         todays_data = get_measurement_within_24_hours(remaing_capacity_data)
 
         return todays_data
