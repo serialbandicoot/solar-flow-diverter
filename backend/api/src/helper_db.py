@@ -8,7 +8,8 @@ class Store:
     PV = "pv_data_store"
     MO = "mo_data_store"
     ST = "settings"
-    HS = "home_sensor"
+    NO = "notifications"
+    PR = "priorities"
     SS = "sunrise_sunset"
 
     def get_value(color_enum):
@@ -63,7 +64,6 @@ class HelperDB:
         return self._get_last(store)
 
     def get_pv(self):
-
         def get_measurement_within_24_hours(data):
             current_time = datetime.now()
             start_time = datetime(
@@ -79,7 +79,6 @@ class HelperDB:
             ]
 
             return filtered_data
-
 
         def extract_timestamp_and_capacity(data):
             extracted_data = list(
@@ -101,43 +100,38 @@ class HelperDB:
 
         return todays_data
 
+    def post_settings(self, lat: str, long: str):
+        store = self._get_or_create(Store.ST)
+        record = self._get_last(store)
+        
+        # Limited to lat/long and stored as string
+        record['lat']=lat
+        record['long']=long
+
+        store.update(record, doc_ids=[1])
+
+        return self._get_last(store)
+
     def get_settings(self):
         store = self._get_or_create(Store.ST)
 
         return self._get_last(store)
 
-    def post_home_sensor_priority(self, excess_priority: {}):
-        store = self._get_or_create(Store.HS)
-        first_and_last_record = self._get_last(store)
-        if first_and_last_record:
-            first_and_last_record["excess_priority"]["order"] = excess_priority["order"]
-            first_and_last_record["excess_priority"][
-                "battery_threshold"
-            ] = excess_priority["battery_threshold"]
-            first_and_last_record["excess_priority"][
-                "water_threshold"
-            ] = excess_priority["water_threshold"]
+    def post_notifications(self, notification_type: str, notification_value: bool):
+        store = self._get_or_create(Store.NO)
 
-        first_and_last_record["timestamp"] = str(datetime.now())
-        store.update(first_and_last_record, doc_ids=[1])
+        record = self._get_last(store)
+        record["notifications"][notification_type] = notification_value
+        record["timestamp"] = str(datetime.now())
+
+        store.update(record, doc_ids=[1])
 
         return self._get_last(store)
 
-    def post_home_activations(self, activate: str, activate_state: bool):
-        store = self._get_or_create(Store.HS)
-        first_and_last_record = self._get_last(store)
-        if first_and_last_record:
-            first_and_last_record["home_sensor"][activate] = activate_state
-        else:
-            first_and_last_record = {}
-            first_and_last_record["home_sensor"] = {
-                "bath": False,
-                "home": False,
-                "water": False,
-                "heating": False,
-            }
-        first_and_last_record["timestamp"] = str(datetime.now())
-        store.update(first_and_last_record, doc_ids=[1])
+    def get_notifications(self):
+        store = self._get_or_create(Store.NO)
+
+        return self._get_last(store)
 
     def post_sunrise_sunset(self, data):
         store = self._get_or_create(Store.SS)
@@ -152,7 +146,24 @@ class HelperDB:
 
         return self._get_last(store)
 
-    def get_home_activations(self):
-        store = self._get_or_create(Store.HS)
+    def get_priorities(self):
+        store = self._get_or_create(Store.PR)
+
+        return self._get_last(store)
+
+    def post_priorities(self, excess_priority: {}):
+        store = self._get_or_create(Store.PR)
+        record = self._get_last(store)
+        if record:
+            record["excess_priority"]["order"] = excess_priority["order"]
+            record["excess_priority"]["battery_threshold"] = excess_priority[
+                "battery_threshold"
+            ]
+            record["excess_priority"]["water_threshold"] = excess_priority[
+                "water_threshold"
+            ]
+
+        record["timestamp"] = str(datetime.now())
+        store.update(record, doc_ids=[1])
 
         return self._get_last(store)

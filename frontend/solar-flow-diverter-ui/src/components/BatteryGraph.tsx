@@ -11,6 +11,8 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { apiUrl } from '../config';
+import SectionHeader from './SectionHeader';
+import { title } from 'process';
 
 const ALL_PV_ENDPOINT = '/all_pv';
 const API_URL = `${apiUrl}${ALL_PV_ENDPOINT}`;
@@ -44,7 +46,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Daily Battery Usage',
+      text: '',
     },
   },
 };
@@ -97,5 +99,10 @@ export function BatteryGraph() {
     ],
   };
 
-  return <Line options={options} data={updatedChartData} />;
+  return( 
+      <>
+        <SectionHeader title="Battery Data"/>
+        <Line options={options} data={updatedChartData} />
+      </>
+    )
 }

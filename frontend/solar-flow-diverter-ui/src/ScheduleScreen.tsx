@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { apiUrl } from './config';
 import Header from './components/Header';
-import { BatteryGraph } from './components/BatteryGraph';
 
 const ScheduleScreen: React.FC = () => {
   const [data, setData] = useState<string>(''); // You can replace 'string' with the appropriate data type
@@ -40,7 +39,7 @@ const ScheduleScreen: React.FC = () => {
   return (
     <div>
       <Header />
-      <BatteryGraph />
+      
     </div>
   );
 };

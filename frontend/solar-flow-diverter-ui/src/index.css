@@ -141,12 +141,12 @@ th {
   text-decoration: none;
 }
 
-.cog-icon-container {
+.icon-container {
   padding: 10px;
   border-radius: 50%;
 }
 
-.cog-icon {
+.fa-icon {
   font-size: 64px; /* Increased font size (three times) */
   margin-right: 10px;
   color: white; /* White color for the cog icon */

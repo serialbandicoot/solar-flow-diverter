@@ -6,6 +6,7 @@ import Header from './components/Header';
 import MixergyTankData from './components/MixergyTankData';
 import HomeSensor from './components/Notifications';
 import SunriseSunset from './components/SunriseSunset';
+import { BatteryGraph } from './components/BatteryGraph';
 
 const HomeScreen: React.FC = () => {
 
@@ -17,6 +18,7 @@ const HomeScreen: React.FC = () => {
       <SunriseSunset />
       <MixergyTankData />
       <HomeSensor />
+      <BatteryGraph />
     </div>
   );
 };

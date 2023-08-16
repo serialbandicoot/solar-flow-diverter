@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { apiUrl } from './config';
 import Header from './components/Header';
-import HomeSensorPrioritySelector from './components/HomeSensorPrioritySelector';
+import PrioritySelector from './components/HomeSensorPrioritySelector';
 import { Link } from 'react-router-dom';
 
 interface SettingsData {
@@ -53,7 +53,7 @@ const DataComponent: React.FC = () => {
   const handleUpdateClick = async () => {
     try {
       const response = await fetch(API_URL, {
-        method: 'PUT',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -162,11 +162,8 @@ const DataComponent: React.FC = () => {
           </button>
         </div>
         <div>Excess Priority -&gt;</div>
-        <HomeSensorPrioritySelector />
+        <PrioritySelector />
       </div>
-      <Link to="/schedule" style={linkStyle}>
-        Go to Schedule
-      </Link>
     </div>
   );
 };

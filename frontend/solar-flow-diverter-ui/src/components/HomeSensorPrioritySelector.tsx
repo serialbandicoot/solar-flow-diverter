@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { apiUrl } from '../config';
 
-const ACTIVATION_ENDPOINT = '/activation';
+const ACTIVATION_ENDPOINT = '/priorities';
 const API_URL = `${apiUrl}${ACTIVATION_ENDPOINT}`;
 
 interface HomeSensorPriority {
@@ -12,7 +12,7 @@ interface HomeSensorPriority {
   };
 }
 
-const HomeSensorPrioritySelector: React.FC = () => {
+const PrioritySelector: React.FC = () => {
   const [selectedPriority, setSelectedPriority] = useState<'battery' | 'water_tank'>('battery');
   const [batteryThreshold, setBatteryThreshold] = useState<GLfloat>(0);
   const [waterThreshold, setWaterThreshold] = useState<GLfloat>(0);
@@ -158,4 +158,4 @@ const HomeSensorPrioritySelector: React.FC = () => {
   );
 };
 
-export default HomeSensorPrioritySelector;
+export default PrioritySelector;

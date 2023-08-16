@@ -2,11 +2,10 @@
 
 import asyncio
 from aiohttp import ClientSession
-from dotenv import load_dotenv
 from flask import Flask, Response, request
 from flask_cors import CORS
 from src.sms import SMS
-from src import soliscloud_api
+
 from src.helper_db import HelperDB
 import os, json, logging, datetime, requests
 from src import metoffer
@@ -60,6 +59,12 @@ def get_all_pv():
 def get_5d():
     return jsonify(HelperDB().get_last_5day())
 
+
+@app.route("/v1/settings", methods=["POST"])
+def post_settings():
+    data = request.get_json()
+
+    return jsonify(HelperDB().post_settings(data['lat'], data['long']))
 
 @app.route("/v1/settings", methods=["GET"])
 def get_settings():
@@ -122,39 +127,34 @@ async def pv():
     )
 
 
-@app.route("/v1/activation", methods=["POST"])
+@app.route("/v1/priorities", methods=["POST"])
 def post_activation():
     data = request.get_json()
-    activation = data.get("activate")
-    activation_type = data.get("type")
-    if activation_type:
-        try:
-            config = HelperDB().get_settings()
-            account_id = config["twillio_account_id"]
-            auth_token = config["twillio_auth_token"]
-            HelperDB().post_home_activations(activation_type, activation)
-            SMS(account_id, auth_token).send(
-                to="+447970062349",
-                message_body=f"{activation_type} is now {activation}",
-            )
-            return jsonify({"message": "SUCCESS"}), 200
-        except Exception as e:
-            jsonify(
-                {
-                    "error": f"Activation type error {activation_type} not found with error {e}"
-                }
-            ), 500
-    if data.get("excess_priority"):
-        return jsonify(
-            HelperDB().post_home_sensor_priority(data.get("excess_priority"))
-        )
+    last_update = HelperDB().post_priorities(data["excess_priority"])
 
-    return jsonify({"error": f"Activation type {activation_type} not created"}), 404
+    return jsonify(last_update)
 
 
-@app.route("/v1/activation", methods=["GET"])
+@app.route("/v1/priorities", methods=["GET"])
 def get_activation():
-    return jsonify(HelperDB().get_home_activations()), 200
+    return jsonify(HelperDB().get_priorities()), 200
+
+
+@app.route("/v1/notifications", methods=["GET"])
+def get_notifications():
+    return jsonify(HelperDB().get_notifications()), 200
+
+
+@app.route("/v1/notifications", methods=["POST"])
+def post_notifications():
+    data = request.get_json()
+    notification_type = data.get("notification_type")
+    notification_value = data.get("notification_value")
+
+    return (
+        jsonify(HelperDB().post_notifications(notification_type, notification_value)),
+        200,
+    )
 
 
 @app.route("/v1/solar_diverter", methods=["GET"])
