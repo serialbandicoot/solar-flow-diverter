@@ -160,25 +160,30 @@ const FiveDayForecast: React.FC<Props> = () => {
               return (
                 <td key={periodIndex} className="centered-td">
                   <div className="centered-container">
-                  <div
-                      className="centered-div"
-                      style={{
-                        backgroundColor:
-                          temperature >= 20
-                            ? '#FF8C00' // Light Orange
-                            : temperature >= 15
-                            ? '#FFA500' // Yellow
-                            : temperature >= 10
-                            ? '#ADD8E6' // Light Blue
-                            : temperature >= 5
-                            ? '#0000FF' // Blue
-                            : '#00008B', // Dark Blue
-                      }}
-                    >
-                      {temperature}&deg;C
-                    </div>
-                    <WeatherIcon number={period.Rep[0].W} />
-                  </div>
+  <div
+    className="centered-div"
+    style={{
+      backgroundColor:
+        temperature >= 20
+          ? '#FF8C00' // Light Orange
+          : temperature >= 15
+          ? '#FFA500' // Yellow
+          : temperature >= 10
+          ? '#ADD8E6' // Light Blue
+          : temperature >= 5
+          ? '#0000FF' // Blue
+          : '#00008B', // Dark Blue
+      order: 2, // Default order for larger screens
+    }}
+  >
+    {temperature}&deg;C
+  </div>
+  <WeatherIcon
+    number={period.Rep[0].W}
+    style={{ order: 1 }} // Default order for larger screens
+  />
+</div>
+
                   <p>{WEATHER_CODES[period.Rep[0].W]} with visibility {VISIBILITY[period.Rep[0].V]}</p>
                 </td>
               );
