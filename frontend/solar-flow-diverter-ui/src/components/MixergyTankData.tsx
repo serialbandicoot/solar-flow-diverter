@@ -6,12 +6,13 @@ import SectionHeader from './SectionHeader';
 const MixergyTankData: React.FC = () => {
   return (
     <div>
-      <SectionHeader title="Mixergy Water Tank" />
-      <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-        <WaterTank />
-        <Schedule />
-      </div>
+    <SectionHeader title="Mixergy Water Tank" />
+    <div className="flex-container-tank">
+      <Schedule />
+      <WaterTank />
     </div>
+  </div>
+  
   );
 };
 

@@ -30,7 +30,7 @@ const Schedule: React.FC = () => {
   }, []);
 
   const containerStyle: React.CSSProperties = {
-    marginLeft: '20px',
+    paddingRight: '20px',
     marginTop: '20px',
     flex: 1,
   };
@@ -47,13 +47,17 @@ const Schedule: React.FC = () => {
     marginRight: '5px',
   };
 
+  function capitalizeWord(word: string): string {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
   return (
     <div style={containerStyle}>
       <table>
         <thead>
           <tr>
             {days.map((day) => (
-              <th key={day}>{day}</th>
+              <th key={day}>{capitalizeWord(day)}</th>
             ))}
           </tr>
         </thead>

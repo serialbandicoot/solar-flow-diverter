@@ -196,7 +196,6 @@ th {
   }
 }
 
-
 .weather-description {
   height: 50px;
   display: flex;
@@ -205,11 +204,15 @@ th {
   margin-bottom: 30px;
 }
 
-.temperature-background {
-  /* Your existing styles here */
-  /* ... */
-  
-  /* Add margin to create space between the two divs */
-  margin-right: 16px; /* You can adjust the value */
+.flex-container-tank {
+  display: flex;
+  flex-direction: row; /* Default layout for larger screens */
+  align-items: flex-start;
 }
 
+@media (max-width: 768px) {
+  /* Adjust layout for smaller screens */
+  .flex-container-tank {
+    flex-direction: column;
+  }
+}
