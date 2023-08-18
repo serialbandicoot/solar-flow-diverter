@@ -29,7 +29,7 @@ const Schedule: React.FC = () => {
     fetchScheduleData();
   }, []);
 
-  const containerStyle: React.CSSProperties = {
+  const containerScheduleStyle: React.CSSProperties = {
     paddingRight: '20px',
     marginTop: '20px',
     flex: 1,
@@ -52,7 +52,7 @@ const Schedule: React.FC = () => {
   }
 
   return (
-    <div style={containerStyle}>
+    <div style={containerScheduleStyle}>
       <table>
         <thead>
           <tr>

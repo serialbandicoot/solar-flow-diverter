@@ -216,3 +216,10 @@ th {
     flex-direction: column;
   }
 }
+
+@media (max-width: 768px) {
+  .flex-container-tank {
+    grid-template-columns: repeat(1, 1fr); /* Change to a single column for small screens */
+    padding-right: 0; /* Remove padding for small screens */
+  }
+}
