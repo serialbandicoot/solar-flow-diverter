@@ -36,10 +36,66 @@ const ScheduleScreen: React.FC = () => {
     };
   }, []); // Empty dependency array to run the effect only once
 
+  const containerStyle: React.CSSProperties = {
+    marginTop: '20px',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gridGap: '10px',
+    flex: 1,
+  };
+
+  const buttonStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100px',
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+    fontSize: '64px',
+    cursor: 'pointer',
+    outline: 'none',
+  };
+
+  const isBatteryClicked = false;
+  const isWaterTankClicked = false;
+  const isGridClicked = false;
+
   return (
     <div>
       <Header />
-      
+      <h2>Notifications</h2>
+      <p>Battery Notifications will trigger when the threshold is 85%.</p>
+      <p>Water Notifications will trigger when the threshold is 70%.</p>
+      <p>Notifications will be sent when the Grid is receiving imports.</p>
+      <div>
+      <div style={containerStyle}>
+        <button
+          style={{
+            ...buttonStyle,
+            background: isBatteryClicked ? '#F7AD40' : 'transparent',
+          }}
+        >
+          🔋
+        </button>
+        <button
+          style={{
+            ...buttonStyle,
+            background: isWaterTankClicked ? '#F7AD40' : 'transparent',
+          }}
+        >
+          🚰
+        </button>
+        <button
+          style={{
+            ...buttonStyle,
+            background: isGridClicked ? '#F7AD40' : 'transparent',
+          }}
+
+        >
+          🏭
+        </button>
+      </div>
+    </div>
     </div>
   );
 };

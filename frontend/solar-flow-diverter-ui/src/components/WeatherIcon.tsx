@@ -49,7 +49,7 @@ const WeatherIcon: React.FC<WeatherIconProps> = ({ number }) => {
   const IconComponent = getIconByNumber(number);
 
   return (
-    <div>
+    <div >
       {IconComponent && <IconComponent width="100" height="100" />}
     </div>
   );
