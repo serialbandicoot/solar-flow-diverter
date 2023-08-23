@@ -73,7 +73,7 @@ const FiveDayForecast: React.FC<Props> = () => {
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
-        const response = await fetch(apiUrl + '/5d');
+        const response = await fetch(apiUrl + '/weather?step=5d');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }

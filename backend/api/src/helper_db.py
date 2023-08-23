@@ -5,8 +5,9 @@ from datetime import datetime, timedelta
 
 
 class Store:
-    PV = "pv_data_store"
-    MO = "mo_data_store"
+    PV = "pv_data_store" #todo: remove data_store
+    MO5 = "mo_5day"
+    MO3 = "mo_3hr"
     ST = "settings"
     NO = "notifications"
     PR = "priorities"
@@ -38,12 +39,20 @@ class HelperDB:
         return store[len(store) - 1]
 
     def post_5day(self, data):
-        store = self._get_or_create(Store.MO)
+        store = self._get_or_create(Store.MO5)
         weather = {}
         weather["timestamp"] = str(datetime.now())
-        weather["fiveDay"] = data
+        weather["fiveDay"] = data #todo: change to five_day
 
         store.insert(weather)
+
+    def post_3hr(self, data):
+        store = self._get_or_create(Store.MO3)
+        weather = {}
+        weather["timestamp"] = str(datetime.now())
+        weather["three_hour"] = data
+
+        store.insert(weather)        
 
     def post_pv(self, data):
         store = self._get_or_create(Store.PV)
@@ -54,7 +63,7 @@ class HelperDB:
         store.insert(plant)
 
     def get_last_5day(self):
-        store = self._get_or_create(Store.MO)
+        store = self._get_or_create(Store.MO5)
 
         return self._get_last(store)
 

@@ -54,12 +54,6 @@ def get_pv():
 def get_all_pv():
     return jsonify(HelperDB().get_pv())
 
-
-@app.route("/v1/5d", methods=["GET"])
-def get_5d():
-    return jsonify(HelperDB().get_last_5day())
-
-
 @app.route("/v1/settings", methods=["POST"])
 def post_settings():
     data = request.get_json()
@@ -93,28 +87,49 @@ def mock_tank_latest_measurement():
         return jsonify({"error": "Latest measurement data not found"}), 404
 
 
-@app.route("/v1/create_5d", methods=["GET"])
+@app.route("/v1/weather", methods=["GET"])
+def get_weather():
+    step = request.args.get('step')
+    if step == "5d":
+        return jsonify(HelperDB().get_last_5day())
+
+    return jsonify({"error": f"Weather step not found {step}"}), 404 
+
+@app.route("/v1/weather", methods=["POST"])
 def create_5d():
+    data = request.get_json()
+    step_option = data["step"] 
+    if step_option == "5d":
+        step = metoffer.DAILY
+    elif step_option == "3hr":
+        step = metoffer.THREE_HOURLY
+    else:
+         return jsonify({"error": "Failed to create select a MO Weather Option"}), 500 
+
     try:
         logging.debug(f"Get 5d Forecast - {datetime.datetime.now()}")
 
         config = HelperDB().get_settings()
         M = metoffer.MetOffer(config["met_office_api_key"])
-        bath = M.nearest_loc_forecast(
-            float(config["lat"]), float(config["long"]), metoffer.DAILY
+        location = M.nearest_loc_forecast(
+            float(config["lat"]), float(config["long"]), step
         )
 
-        logging.info(bath)
+        logging.info(location)
 
-        HelperDB().post_5day(bath)
+        if step_option == "5d":
+            HelperDB().post_5day(location)
+        elif step_option == "3hr":
+            HelperDB().post_3hr(location)
+
     except Exception as e:
         logging.error(f"FAILED MO - {datetime.datetime.now()} - {e}")
         return jsonify({"error": "Failed to create MO Weather data"}), 500
 
-    return {"message": "SUCCESS"}
+    return {"message": f"SUCCESS >> {step}"}
 
 
-@app.route("/v1/create_pv", methods=["GET"])
+@app.route("/v1/create_pv", methods=["POST"])
 async def pv():
     config = HelperDB().get_settings()
 
