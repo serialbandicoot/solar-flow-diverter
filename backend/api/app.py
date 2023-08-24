@@ -98,7 +98,7 @@ def get_weather():
     return jsonify({"error": f"Weather step not found {step}"}), 404 
 
 @app.route("/v1/weather", methods=["POST"])
-def create_5d():
+def post_weather():
     data = request.get_json()
     step_option = data["step"] 
     if step_option == "5d":
@@ -109,7 +109,7 @@ def create_5d():
          return jsonify({"error": "Failed to create select a MO Weather Option"}), 500 
 
     try:
-        logging.debug(f"Get 5d Forecast - {datetime.datetime.now()}")
+        logging.debug(f"Get {step_option} Forecast - {datetime.datetime.now()}")
 
         config = HelperDB().get_settings()
         M = metoffer.MetOffer(config["met_office_api_key"])
