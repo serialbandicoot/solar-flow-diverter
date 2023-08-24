@@ -104,7 +104,7 @@ def create_5d():
     if step_option == "5d":
         step = metoffer.DAILY
     elif step_option == "3h":
-        step = metoffer.HOURLY
+        step = metoffer.THREE_HOURLY
     else:
          return jsonify({"error": "Failed to create select a MO Weather Option"}), 500 
 
