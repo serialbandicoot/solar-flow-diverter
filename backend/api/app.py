@@ -92,6 +92,8 @@ def get_weather():
     step = request.args.get('step')
     if step == "5d":
         return jsonify(HelperDB().get_last_5day())
+    elif step == "3h":
+        return jsonify(HelperDB().get_last_3hr())
 
     return jsonify({"error": f"Weather step not found {step}"}), 404 
 
@@ -101,8 +103,8 @@ def create_5d():
     step_option = data["step"] 
     if step_option == "5d":
         step = metoffer.DAILY
-    elif step_option == "3hr":
-        step = metoffer.THREE_HOURLY
+    elif step_option == "3h":
+        step = metoffer.HOURLY
     else:
          return jsonify({"error": "Failed to create select a MO Weather Option"}), 500 
 
@@ -119,8 +121,8 @@ def create_5d():
 
         if step_option == "5d":
             HelperDB().post_5day(location)
-        elif step_option == "3hr":
-            HelperDB().post_3hr(location)
+        elif step_option == "3h":
+            HelperDB().post_3hour(location)
 
     except Exception as e:
         logging.error(f"FAILED MO - {datetime.datetime.now()} - {e}")

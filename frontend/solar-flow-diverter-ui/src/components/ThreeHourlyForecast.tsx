@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import WeatherIcon from './components/WeatherIcon';
-import './index.css';
+import WeatherIcon from './WeatherIcon';
 
-import { apiUrl } from './config';
+import { apiUrl } from '../config';
 
 interface Props {}
 
 interface RepData {
-  day: string;
-  Dm: string;
-  W: string;
-  V: string;
+  day: string; 
+  W: string; // WeatherType
+  V: string; // Visibility
+  T: string; // Tempertature
 }
 
 interface PeriodData {
@@ -65,7 +64,7 @@ const WEATHER_CODES: { [key: string]: string } = {
 };
 
 
-const FiveDayForecast: React.FC<Props> = () => {
+const ThreeHourlyForecast: React.FC<Props> = () => {
   const [lastWeatherTimeStamp, setLastWeatherTimeStamp] = useState<string>('');
   const [weatherData, setWeatherData] = useState<PeriodData[]>([]);
   const [locationName, setLocationName] = useState<string>('');
@@ -73,15 +72,15 @@ const FiveDayForecast: React.FC<Props> = () => {
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
-        const response = await fetch(apiUrl + '/weather?step=5d');
+        const response = await fetch(apiUrl + '/weather?step=3h');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
         const data = await response.json();
-        const locationName = data.fiveDay.SiteRep.DV.Location.name;
+        const locationName = data.three_hour.SiteRep.DV.Location.name;
         const timeStamp = data.timestamp;
         setLocationName(locationName);
-        setWeatherData(data.fiveDay.SiteRep.DV.Location.Period);
+        setWeatherData(data.three_hour.SiteRep.DV.Location.Period);
         setLastWeatherTimeStamp(timeStamp);
       } catch (error) {
         console.error('Error fetching weather data:', error);
@@ -103,7 +102,7 @@ const FiveDayForecast: React.FC<Props> = () => {
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const today = new Date();
   const rotatedDays = rotateDays(days, today.getDay());
-  const fiveDayForecast = rotatedDays.slice(0, 5); // Get the first 5 days for the forecast
+  const threeHourlyForecast = rotatedDays.slice(0, 5); // Get the first 5 days for the forecast
 
   const reloadPage = () => {
     window.location.reload(); // Reload the current page
@@ -137,32 +136,35 @@ const FiveDayForecast: React.FC<Props> = () => {
   return (
     <div className="componentTop">
       <h2>
-        5 Day Forecast ({toTitleCase(locationName)} at{' '}
+        3 Hourly Forecast ({toTitleCase(locationName)} at{' '}
         {lastWeatherTimeStamp && parseDate(lastWeatherTimeStamp)})
       </h2>
       <table style={{ tableLayout: 'fixed', width: '100%' }}>
-        <thead>
-          <tr>
-            {fiveDayForecast.map((_, index) => {
-              const today = new Date();
-              const currentDate = new Date(
-                today.getFullYear(),
-                today.getMonth(),
-                today.getDate() + index
-              );
-              const dayOfWeek = days[currentDate.getDay()];
-              const month = currentDate.toLocaleString('en-US', { month: 'short' });
-              const formattedDate = `${dayOfWeek} (${currentDate.getDate()}-${month})`;
+      <thead>
+  <tr>
+    {threeHourlyForecast.map((_, index) => {
+      const today = new Date();
+      const currentHour = today.getHours() + (index * 3); // Adjusting the hour here
+      const adjustedHour = currentHour % 24; // Keep the hour within 0-23 range
+      const formattedHour = adjustedHour.toString().padStart(2, '0'); // Padding with zero if needed
+      
+      const startTime = index === 0 ? `${formattedHour}:${today.getMinutes().toString().padStart(2, '0')}` : `${formattedHour}:00`;
+      
+      const nextHour = (adjustedHour + 3) % 24; // Calculate next adjusted hour
+      const formattedNextHour = nextHour.toString().padStart(2, '0');
+      const endTime = `${formattedNextHour}:00`;
+      
+      return <th key={index}>{startTime} - {endTime}</th>;
+    })}
+  </tr>
+</thead>
 
-              return <th key={index}>{formattedDate}</th>;
-            })}
-          </tr>
-        </thead>
+
 
         <tbody>
           <tr>
             {weatherData.map((period, periodIndex) => {
-              const temperature = parseInt(period.Rep[0].Dm, 10);
+              const temperature = parseInt(period.Rep[0].T, 10);
               return (
                 <td key={periodIndex}>
                   <div className="centered-container">
@@ -203,4 +205,4 @@ const FiveDayForecast: React.FC<Props> = () => {
   );
 };
 
-export default FiveDayForecast;
+export default ThreeHourlyForecast;

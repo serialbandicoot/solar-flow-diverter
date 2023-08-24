@@ -46,7 +46,7 @@ class HelperDB:
 
         store.insert(weather)
 
-    def post_3hr(self, data):
+    def post_3hour(self, data):
         store = self._get_or_create(Store.MO3)
         weather = {}
         weather["timestamp"] = str(datetime.now())
@@ -64,6 +64,11 @@ class HelperDB:
 
     def get_last_5day(self):
         store = self._get_or_create(Store.MO5)
+
+        return self._get_last(store)
+    
+    def get_last_3hr(self):
+        store = self._get_or_create(Store.MO3)
 
         return self._get_last(store)
 
