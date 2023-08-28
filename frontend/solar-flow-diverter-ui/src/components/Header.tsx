@@ -3,12 +3,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaCalendar, FaCog } from 'react-icons/fa';
+import LightBulb from './LightBulb';
 
 const Header: React.FC = () => {
   return (
     <header className="header-container">
       <Link to="/" style={{ textDecoration: 'none' }}>
-        <img src="/light_icon.svg" alt="Icon" width={60} style={{ paddingLeft: '20px' }} />
+        <LightBulb battery=26 />
       </Link>
       <Link to="/" className="home-link"> {/* Make the "Solar Flow Diverter" text a link */}
         <h1>Solar Flow Diverter</h1>
