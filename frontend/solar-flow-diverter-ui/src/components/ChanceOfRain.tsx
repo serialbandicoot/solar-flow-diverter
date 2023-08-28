@@ -13,7 +13,7 @@ const ChanceOfRain: React.FC<ChanceOfRainProps> = ({ percentage }) => {
     <div className="chance-of-rain">
       <FontAwesomeIcon icon={faCloudShowersHeavy} className="rain-icon" />
       <div className="rain-text">
-        {parsedPercentage}% Rain
+        {parsedPercentage}% 
       </div>
     </div>
   );
