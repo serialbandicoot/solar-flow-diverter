@@ -19,7 +19,7 @@ const getFillColor = (batteryValue: number): string => {
   }
 };
 
-const LightbulbSVG: React.FC<LightbulbProps> = ({ batteryValue }) => {
+const LightBulb: React.FC<LightbulbProps> = ({ batteryValue }) => {
   const fillColor = getFillColor(batteryValue);
 
   return (
@@ -38,4 +38,4 @@ const LightbulbSVG: React.FC<LightbulbProps> = ({ batteryValue }) => {
   );
 };
 
-export default LightbulbSVG;
+export default LightBulb;
