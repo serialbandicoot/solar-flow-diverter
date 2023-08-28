@@ -9,7 +9,7 @@ const Header: React.FC = () => {
   return (
     <header className="header-container">
       <Link to="/" style={{ textDecoration: 'none' }}>
-        <LightBulb batteryValue={26}/>
+        <LightBulb batteryValue={60}/>
       </Link>
       <Link to="/" className="home-link"> {/* Make the "Solar Flow Diverter" text a link */}
         <h1>Solar Flow Diverter</h1>
