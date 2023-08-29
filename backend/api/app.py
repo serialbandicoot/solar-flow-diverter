@@ -52,7 +52,7 @@ def get_pv():
 @app.route("/v1/battery", methods=["GET"])
 def get_battery():
     last_pv = HelperDB().get_last_pv()
-    battery = last_pv["remainingCapacity"]
+    battery = last_pv["plant"][0]["remainingCapacity"]
     
     return jsonify({"battery":battery})
 
