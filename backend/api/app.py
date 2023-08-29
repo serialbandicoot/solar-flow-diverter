@@ -49,6 +49,13 @@ def get_home():
 def get_pv():
     return jsonify(HelperDB().get_last_pv())
 
+@app.route("/v1/battery", methods=["GET"])
+def get_battery():
+    last_pv = HelperDB().get_last_pv()
+    battery = last_pv["remainingCapacity"]
+    
+    return jsonify({"battery":battery})
+
 
 @app.route("/v1/all_pv", methods=["GET"])
 def get_all_pv():
