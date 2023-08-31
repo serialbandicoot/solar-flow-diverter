@@ -33,7 +33,7 @@ const WeatherTable: React.FC = () => {
           throw new Error('Failed to fetch data');
         }
         const data = await response.json();
-        const periodData = data.three_hour.SiteRep.DV.Location.Period[0];
+        const periodData = data.three_hour.SiteRep.DV.Location.Period[1];
         setWeatherData(periodData.Rep);
 
         // Extract time values and set as column headers
