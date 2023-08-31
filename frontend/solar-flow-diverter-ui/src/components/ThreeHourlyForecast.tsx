@@ -36,8 +36,10 @@ const WeatherTable: React.FC = () => {
       const periodData = data.three_hour.SiteRep.DV.Location.Period[1];
       const repData = periodData.Rep;
 
-      // Filter out past entries and show all entries if less than 3
+      // Convert current time to minutes past midnight
       const currentTime = new Date().getHours() * 60 + new Date().getMinutes();
+
+      // Filter out past entries and show all entries if less than 3
       const futureEntries = repData.filter(entry => parseInt(entry.$, 10) >= currentTime);
       const finalWeatherData = futureEntries.length < 3 ? repData : futureEntries;
 
@@ -46,14 +48,26 @@ const WeatherTable: React.FC = () => {
       // Extract time values and set as column headers
       const times = finalWeatherData.map((entry: WeatherEntry) => {
         const timeMinutes = parseInt(entry.$, 10);
-        const hours = Math.floor(timeMinutes / 60);
-        const minutes = timeMinutes % 60;
-        const startTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-        const endTimeHours = Math.floor((timeMinutes + 180) / 60);
-        const endTimeMinutes = (timeMinutes + 180) % 60;
-        const endTime = `${endTimeHours.toString().padStart(2, '0')}:${endTimeMinutes.toString().padStart(2, '0')}`;
+        const startHours = Math.floor(timeMinutes / 60);
+        const startMinutes = timeMinutes % 60;
+        const startDate = new Date(0, 0, 0, startHours, startMinutes);
+        const startTime = startDate.toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+
+        const endMinutes = timeMinutes + 180;
+        const endHours = Math.floor(endMinutes / 60);
+        const endMinutesPart = endMinutes % 60;
+        const endDate = new Date(0, 0, 0, endHours, endMinutesPart);
+        const endTime = endDate.toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+
         return `${startTime} - ${endTime}`;
       });
+
       setTimeColumns(times);
     } catch (error) {
       console.error('Error fetching weather data:', error);
@@ -62,6 +76,7 @@ const WeatherTable: React.FC = () => {
 
   fetchWeatherData();
 }, []);
+
 
 
 
