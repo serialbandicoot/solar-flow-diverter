@@ -26,45 +26,46 @@ const WeatherTable: React.FC = () => {
   const [timeColumns, setTimeColumns] = useState<string[]>([]);
 
   useEffect(() => {
-    const fetchWeatherData = async () => {
-      try {
-        const response = await fetch(apiUrl + '/weather?step=3h');
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-        const periodData = data.three_hour.SiteRep.DV.Location.Period[1];
-        setWeatherData(periodData.Rep);
-
-        // Extract time values and set as column headers
-        const times = periodData.Rep.map((entry: WeatherEntry) => {
-          const startMinutes = parseInt(entry.$, 10);
-          let endMinutes = startMinutes + 180; // Adding 3 hours
-
-          // Adjust the end time based on the interval
-          if (endMinutes === 900) {
-            endMinutes = 899; // For 14:59
-          } else if (endMinutes === 1080) {
-            endMinutes = 1079; // For 17:59
-          }
-
-          const startDate = new Date(0, 0, 0, 0, startMinutes);
-          const endDate = new Date(0, 0, 0, 0, endMinutes);
-          const startTime = startDate.toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-          });
-          const endTime = endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-          return `${startTime} - ${endTime}`;
-        });
-        setTimeColumns(times);
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
+  const fetchWeatherData = async () => {
+    try {
+      const response = await fetch(apiUrl + '/weather?step=3h');
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
       }
-    };
+      const data = await response.json();
+      const periodData = data.three_hour.SiteRep.DV.Location.Period[1];
+      const repData = periodData.Rep;
+      
+      // Filter out past entries and show all entries if less than 3
+      const currentTime = new Date().getHours() * 60 + new Date().getMinutes();
+      const futureEntries = repData.filter(entry => parseInt(entry.$, 10) >= currentTime);
+      const finalWeatherData = futureEntries.length < 3 ? repData : futureEntries;
+      
+      setWeatherData(finalWeatherData);
 
-    fetchWeatherData();
-  }, []);
+      // Extract time values and set as column headers
+      const times = finalWeatherData.map((entry: WeatherEntry) => {
+        const startMinutes = parseInt(entry.$, 10);
+        const endMinutes = startMinutes + 180; // Adding 3 hours
+
+        const startDate = new Date(0, 0, 0, 0, startMinutes);
+        const endDate = new Date(0, 0, 0, 0, endMinutes);
+        const startTime = startDate.toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+        const endTime = endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return `${startTime} - ${endTime}`;
+      });
+      setTimeColumns(times);
+    } catch (error) {
+      console.error('Error fetching weather data:', error);
+    }
+  };
+
+  fetchWeatherData();
+}, []);
+
 
   return (
     <div className="weather-table">
