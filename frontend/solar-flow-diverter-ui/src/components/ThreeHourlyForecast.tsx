@@ -35,26 +35,23 @@ const WeatherTable: React.FC = () => {
       const data = await response.json();
       const periodData = data.three_hour.SiteRep.DV.Location.Period[1];
       const repData = periodData.Rep;
-      
+
       // Filter out past entries and show all entries if less than 3
       const currentTime = new Date().getHours() * 60 + new Date().getMinutes();
       const futureEntries = repData.filter(entry => parseInt(entry.$, 10) >= currentTime);
       const finalWeatherData = futureEntries.length < 3 ? repData : futureEntries;
-      
+
       setWeatherData(finalWeatherData);
 
       // Extract time values and set as column headers
       const times = finalWeatherData.map((entry: WeatherEntry) => {
-        const startMinutes = parseInt(entry.$, 10);
-        const endMinutes = startMinutes + 180; // Adding 3 hours
-
-        const startDate = new Date(0, 0, 0, 0, startMinutes);
-        const endDate = new Date(0, 0, 0, 0, endMinutes);
-        const startTime = startDate.toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit',
-        });
-        const endTime = endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const timeMinutes = parseInt(entry.$, 10);
+        const hours = Math.floor(timeMinutes / 60);
+        const minutes = timeMinutes % 60;
+        const startTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+        const endTimeHours = Math.floor((timeMinutes + 180) / 60);
+        const endTimeMinutes = (timeMinutes + 180) % 60;
+        const endTime = `${endTimeHours.toString().padStart(2, '0')}:${endTimeMinutes.toString().padStart(2, '0')}`;
         return `${startTime} - ${endTime}`;
       });
       setTimeColumns(times);
@@ -65,6 +62,7 @@ const WeatherTable: React.FC = () => {
 
   fetchWeatherData();
 }, []);
+
 
 
   return (
