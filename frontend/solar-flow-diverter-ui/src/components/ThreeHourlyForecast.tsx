@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { apiUrl } from '../config';
-import WeatherIcon from './WeatherIcon';
 import Compass from './Compass';
 import WindSpeed from './WindSpeed';
 import Humidity from './Humidity';
@@ -24,8 +23,10 @@ interface WeatherEntry {
 const WeatherTable: React.FC = () => {
   const [weatherData, setWeatherData] = useState<WeatherEntry[]>([]);
   const [timeColumns, setTimeColumns] = useState<string[]>([]);
+  const [locationName, setLocationName] = useState<string>('');
 
   useEffect(() => {
+    
     const fetchWeatherData = async () => {
       try {
         const response = await fetch(apiUrl + '/weather?step=3h');
@@ -35,6 +36,7 @@ const WeatherTable: React.FC = () => {
         const data = await response.json();
         const periodData = data.three_hour.SiteRep.DV.Location.Period[0];
         const repData: WeatherEntry[] = periodData.Rep;
+        setLocationName(data.three_hour.SiteRep.DV.Location.name)
   
         // Convert current time to minutes past midnight
         const currentTime = new Date().getHours() * 60 + new Date().getMinutes() - 180;
@@ -80,11 +82,17 @@ const WeatherTable: React.FC = () => {
     fetchWeatherData();
   }, []);
 
-
-
-
+  function toTitleCase(str: string): string {
+    return str.replace(/\w\S*/g, (txt) => {
+      return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
+    });
+  }
+  
   return (
     <div className="weather-table">
+      <h2>
+        3 Hourly Forecast ({toTitleCase(locationName)})
+      </h2>
       <table>
         <thead>
           <tr>

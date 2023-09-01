@@ -12,7 +12,6 @@ import {
 import { Line } from 'react-chartjs-2';
 import { apiUrl } from '../config';
 import SectionHeader from './SectionHeader';
-import { title } from 'process';
 
 const ALL_PV_ENDPOINT = '/all_pv';
 const API_URL = `${apiUrl}${ALL_PV_ENDPOINT}`;
@@ -83,9 +82,6 @@ export function BatteryGraph() {
 
   const labels = chartData.map(entry => getTime(entry.timestamp));
   const remainingCapacityData = chartData.map(entry => entry.remainingCapacity)
-  console.log(remainingCapacityData, labels)
-
-
 
   const updatedChartData = {
     labels,

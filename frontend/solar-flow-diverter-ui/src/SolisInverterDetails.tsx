@@ -85,11 +85,11 @@ const SolisInverterDetails: React.FC = () => {
       <table>
         <thead>
           <tr>
-            <th>Remaining Capacity</th>
+            <th>Remaining</th>
             <th>Current Power</th>
-            <th>Today Exported</th>
-            <th>Today Imported</th>
-            <th>Today Generated</th>
+            <th>Exported</th>
+            <th>Imported</th>
+            <th>Generated</th>
           </tr>
         </thead>
         <tbody>

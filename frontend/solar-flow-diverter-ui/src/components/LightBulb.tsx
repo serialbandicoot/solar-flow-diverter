@@ -1,29 +1,49 @@
+import React, { useState, useEffect } from 'react';
+import { apiUrl } from '../config'; // Import the apiUrl from your configuration file
 
-import React from 'react';
+const BATTERY_ENDPOINT = '/battery';
+const API_URL = `${apiUrl}${BATTERY_ENDPOINT}`;
 
-interface LightbulbProps {
-  batteryValue: number;
-}
+const LightBulb: React.FC = () => {
+  const [batteryValue, setBatteryValue] = useState<number | null>(null);
 
-const getFillColor = (batteryValue: number): string => {
-  if (batteryValue >= 0 && batteryValue <= 25) {
-    return 'blue';
-  } else if (batteryValue <= 50) {
-    return 'amber'; // Replace with appropriate color value
-  } else if (batteryValue <= 75) {
-    return 'lightgreen';
-  } else if (batteryValue <= 100) {
-    return 'darkgreen';
-  } else {
-    return 'black'; // Default color for out-of-range values
-  }
-};
+  useEffect(() => {
+    // Fetch the battery percentage from the API
+    fetch(API_URL)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch battery percentage');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Assuming the API returns a JSON object with a 'battery' property
+        setBatteryValue(data.battery);
+      })
+      .catch((error) => {
+        console.error('Error fetching battery percentage:', error);
+      });
+  }, []);
 
-const LightBulb: React.FC<LightbulbProps> = ({ batteryValue }) => {
+  const getFillColor = (batteryValue: number | null): string => {
+    if (batteryValue !== null) {
+      if (batteryValue >= 0 && batteryValue <= 25) {
+        return 'red';
+      } else if (batteryValue <= 50) {
+        return 'pink'; // Replace with appropriate color value
+      } else if (batteryValue <= 75) {
+        return 'lightgreen';
+      } else if (batteryValue <= 100) {
+        return 'darkgreen';
+      }
+    }
+    return 'black'; // Default color for out-of-range values or if batteryValue is null
+  };
+
   const fillColor = getFillColor(batteryValue);
 
   return (
-    <svg width="200" height="200" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" id="IconChangeColor">
+    <svg width="200" height="150" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" id="IconChangeColor">
       <path d="M21 2L20 3" stroke="#bb0068" strokeLinecap="round" strokeLinejoin="round" fill={fillColor}></path>
       <path d="M3 2L4 3" stroke="#bb0068" strokeLinecap="round" strokeLinejoin="round" fill={fillColor}></path>
       <path d="M21 16L20 15" stroke="#bb0068" strokeLinecap="round" strokeLinejoin="round" fill={fillColor}></path>
