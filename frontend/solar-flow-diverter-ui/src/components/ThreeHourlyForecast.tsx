@@ -26,56 +26,59 @@ const WeatherTable: React.FC = () => {
   const [timeColumns, setTimeColumns] = useState<string[]>([]);
 
   useEffect(() => {
-  const fetchWeatherData = async () => {
-    try {
-      const response = await fetch(apiUrl + '/weather?step=3h');
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
+    const fetchWeatherData = async () => {
+      try {
+        const response = await fetch(apiUrl + '/weather?step=3h');
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        const periodData = data.three_hour.SiteRep.DV.Location.Period[0];
+        const repData: WeatherEntry[] = periodData.Rep;
+  
+        // Convert current time to minutes past midnight
+        const currentTime = new Date().getHours() * 60 + new Date().getMinutes() - 180;
+  
+        // Filter out past entries and show all entries if less than 3
+        const futureEntries = repData.filter((entry) => parseInt(entry.$, 10) >= currentTime);
+        const finalWeatherData = futureEntries.length < 3 ? repData : futureEntries;
+  
+        // Limit the entries to a maximum of 5
+        const limitedWeatherData = finalWeatherData.slice(0, 5);
+  
+        setWeatherData(limitedWeatherData);
+  
+        // Extract time values and set as column headers
+        const times = limitedWeatherData.map((entry: WeatherEntry) => {
+          const timeMinutes = parseInt(entry.$, 10);
+          const startHours = Math.floor(timeMinutes / 60);
+          const startMinutes = timeMinutes % 60;
+          const startDate = new Date(0, 0, 0, startHours, startMinutes);
+          const startTime = startDate.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+  
+          const endMinutes = timeMinutes + 180;
+          const endHours = Math.floor(endMinutes / 60);
+          const endMinutesPart = endMinutes % 60;
+          const endDate = new Date(0, 0, 0, endHours, endMinutesPart);
+          const endTime = endDate.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+  
+          return `${startTime} - ${endTime}`;
+        });
+  
+        setTimeColumns(times);
+      } catch (error) {
+        console.error('Error fetching weather data:', error);
       }
-      const data = await response.json();
-      const periodData = data.three_hour.SiteRep.DV.Location.Period[1];
-      const repData = periodData.Rep;
-
-      // Convert current time to minutes past midnight
-      const currentTime = new Date().getHours() * 60 + new Date().getMinutes();
-
-      // Filter out past entries and show all entries if less than 3
-      const futureEntries = repData.filter(entry => parseInt(entry.$, 10) >= currentTime);
-      const finalWeatherData = futureEntries.length < 3 ? repData : futureEntries;
-
-      setWeatherData(finalWeatherData);
-
-      // Extract time values and set as column headers
-      const times = finalWeatherData.map((entry: WeatherEntry) => {
-        const timeMinutes = parseInt(entry.$, 10);
-        const startHours = Math.floor(timeMinutes / 60);
-        const startMinutes = timeMinutes % 60;
-        const startDate = new Date(0, 0, 0, startHours, startMinutes);
-        const startTime = startDate.toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit',
-        });
-
-        const endMinutes = timeMinutes + 180;
-        const endHours = Math.floor(endMinutes / 60);
-        const endMinutesPart = endMinutes % 60;
-        const endDate = new Date(0, 0, 0, endHours, endMinutesPart);
-        const endTime = endDate.toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit',
-        });
-
-        return `${startTime} - ${endTime}`;
-      });
-
-      setTimeColumns(times);
-    } catch (error) {
-      console.error('Error fetching weather data:', error);
-    }
-  };
-
-  fetchWeatherData();
-}, []);
+    };
+  
+    fetchWeatherData();
+  }, []);
 
 
 
