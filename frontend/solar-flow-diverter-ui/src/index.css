@@ -350,3 +350,30 @@ th {
 .wind-text {
   font-size: 14px; /* Adjust the text size */
 }
+
+/* LightBulb.css */
+.fillTransition {
+  transition: fill 5s ease;
+}
+
+.red-fill {
+  fill: red;
+}
+
+.pink-fill {
+  fill: pink;
+}
+
+.lightgreen-fill {
+  fill: lightgreen;
+}
+
+.darkgreen-fill {
+  fill: darkgreen;
+}
+
+.amber-fill {
+  fill: amber;
+}
+
+
