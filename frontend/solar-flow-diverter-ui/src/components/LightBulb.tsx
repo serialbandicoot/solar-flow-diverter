@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { apiUrl } from '../config'; // Import the apiUrl from your configuration file
-import './LightBulb.css'; // Import the CSS file for styles
 
 const BATTERY_ENDPOINT = '/battery';
 const API_URL = `${apiUrl}${BATTERY_ENDPOINT}`;
