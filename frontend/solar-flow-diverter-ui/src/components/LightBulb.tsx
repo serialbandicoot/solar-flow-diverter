@@ -37,7 +37,7 @@ const LightBulb: React.FC = () => {
         return 'darkgreen';
       }
     }
-    return 'black'; // Default color for out-of-range values or if batteryValue is null
+    return 'amber'; // Default color for out-of-range values or if batteryValue is null
   };
 
   const fillColor = getFillColor(batteryValue);
