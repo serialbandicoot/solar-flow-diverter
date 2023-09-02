@@ -45,8 +45,8 @@ const WeatherTable: React.FC = () => {
         const futureEntries = repData.filter((entry) => parseInt(entry.$, 10) >= currentTime);
         const finalWeatherData = futureEntries.length < 3 ? repData : futureEntries;
   
-        // Limit the entries to a maximum of 5
-        const limitedWeatherData = finalWeatherData.slice(0, 5);
+        // Limit the entries to a maximum of 4
+        const limitedWeatherData = finalWeatherData.slice(0, 4);
   
         setWeatherData(limitedWeatherData);
   
